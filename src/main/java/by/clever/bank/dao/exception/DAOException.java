@@ -2,24 +2,24 @@ package by.clever.bank.dao.exception;
 
 import java.io.Serial;
 
-public class DAOExeption extends Exception {
+public class DAOException extends Exception {
 
     @Serial
     private static final long serialVersionUID = 7665657603430758825L;
 
-    public DAOExeption() {
+    public DAOException() {
         super();
     }
 
-    public DAOExeption(String message) {
+    public DAOException(String message) {
         super(message);
     }
 
-    public DAOExeption(Exception e) {
+    public DAOException(Exception e) {
         super(e);
     }
 
-    public DAOExeption(String message, Exception e) {
+    public DAOException(String message, Exception e) {
         super(message, e);
     }
 }

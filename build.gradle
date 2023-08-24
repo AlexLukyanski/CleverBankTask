@@ -1,5 +1,13 @@
 plugins {
     id 'java'
+    id 'war'
+    id "com.bmuschko.tomcat" version "2.7.0"
+}
+
+war {
+    webAppDirectory = file('src/main/webapp')
+    webInf { from 'src/additionalWebInf' }
+    webXml = file('src/someWeb.xml')
 }
 
 group 'by.clever'
@@ -13,6 +21,10 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     compileOnly 'org.projectlombok:lombok:1.18.28'
+    compileOnly 'jakarta.platform:jakarta.jakartaee-api:10.0.0'
+    implementation 'org.postgresql:postgresql:42.5.0'
+    implementation 'org.apache.logging.log4j:log4j-api:2.12.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
 }
 
 test {

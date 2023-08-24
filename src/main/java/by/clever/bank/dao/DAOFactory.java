@@ -1,12 +1,12 @@
 package by.clever.bank.dao;
 
-import by.clever.bank.dao.impl.ClientDAOImpl;
+import by.clever.bank.dao.impl.AccountDAOImpl;
 import lombok.Getter;
 
 @Getter
 public final class DAOFactory {
 
-    private ClientDAO clientDAO = new ClientDAOImpl();
+    private AccountDAO accountDAO = new AccountDAOImpl();
 
     private DAOFactory() {
     }

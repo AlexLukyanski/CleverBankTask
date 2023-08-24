@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <display-name>CleverBankTask</display-name>
+
+    <display-name>CleverBankTask</display-name>
+
+    <welcome-file-list>
+        <welcome-file>Index.html</welcome-file>
+        <welcome-file>Index.htm</welcome-file>
+        <welcome-file>Index.jsp</welcome-file>
+        <welcome-file>Default.html</welcome-file>
+        <welcome-file>Default.htm</welcome-file>
+        <welcome-file>Default.jsp</welcome-file>
+    </welcome-file-list>
+
+    <servlet>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>by.clever.bank.controller.FrontController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Controller</servlet-name>
+        <url-pattern>/FrontController</url-pattern>
+    </servlet-mapping>
+
+</web-app>
