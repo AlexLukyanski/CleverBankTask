@@ -20,6 +20,7 @@ public class AccountDAOImpl implements AccountDAO {
         try (PreparedStatement preparedStatementOne = connection.prepareStatement(SELECT_BALANCE_FROM_ACCOUNT_SQL)) {
             preparedStatementOne.setString(1, accountNumber);
             ResultSet resultSet = preparedStatementOne.executeQuery();
+            resultSet.next();
             BigDecimal balance = resultSet.getBigDecimal(DBColumnName.ACCOUNT_BALANCE_COLUMN);
             return balance;
         } catch (SQLException e) {
@@ -34,7 +35,7 @@ public class AccountDAOImpl implements AccountDAO {
         try (PreparedStatement preparedStatementTwo = connection.prepareStatement(PUT_MONEY_TO_ACCOUNT_SQL)) {
             preparedStatementTwo.setBigDecimal(1, newBalance);
             preparedStatementTwo.setString(2, accountNumber);
-            preparedStatementTwo.executeQuery();
+            preparedStatementTwo.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException(e);
         }

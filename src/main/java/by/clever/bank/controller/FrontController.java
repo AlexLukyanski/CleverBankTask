@@ -47,7 +47,7 @@ public final class FrontController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
+        executeRequest(request, response);
     }
 
     @Override
@@ -61,7 +61,6 @@ public final class FrontController extends HttpServlet {
             throws ServletException, IOException {
 
         final String contentType = "text/html";
-
         response.setContentType(contentType);
 
         String name = request.getParameter(RequestParam.FRONT_CONTROLLER_ATTRIBUTE);

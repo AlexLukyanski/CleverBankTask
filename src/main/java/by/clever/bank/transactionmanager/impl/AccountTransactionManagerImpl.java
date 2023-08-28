@@ -23,6 +23,7 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
         BigDecimal balance;
         BigDecimal newBalance;
 
+
         try {
             connection.setAutoCommit(false);
             balance = accountDAO.selectBalance(connection, accountNumber);

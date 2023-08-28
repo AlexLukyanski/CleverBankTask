@@ -1,9 +1,8 @@
 package by.clever.bank.service;
 
 import by.clever.bank.service.impl.AccountServiceImpl;
-import lombok.Getter;
 
-@Getter
+
 public final class ServiceFactory {
 
     private final AccountService accountService = new AccountServiceImpl();
@@ -14,6 +13,10 @@ public final class ServiceFactory {
 
     public static final ServiceFactory getInstance() {
         return ServiceFactoryHelper.instance;
+    }
+
+    public AccountService getAccountService() {
+        return accountService;
     }
 
     public static class ServiceFactoryHelper {
