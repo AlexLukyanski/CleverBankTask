@@ -11,7 +11,7 @@ public final class ServiceFactory {
 
     }
 
-    public static final ServiceFactory getInstance() {
+    public static ServiceFactory getInstance() {
         return ServiceFactoryHelper.instance;
     }
 
