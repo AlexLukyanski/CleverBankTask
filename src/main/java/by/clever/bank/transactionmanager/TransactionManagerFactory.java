@@ -1,7 +1,6 @@
 package by.clever.bank.transactionmanager;
 
 import by.clever.bank.transactionmanager.impl.AccountTransactionManagerImpl;
-import lombok.Getter;
 
 public final class TransactionManagerFactory {
 

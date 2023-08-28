@@ -21,8 +21,7 @@ public class AccountDAOImpl implements AccountDAO {
             preparedStatementOne.setString(1, accountNumber);
             ResultSet resultSet = preparedStatementOne.executeQuery();
             resultSet.next();
-            BigDecimal balance = resultSet.getBigDecimal(DBColumnName.ACCOUNT_BALANCE_COLUMN);
-            return balance;
+            return resultSet.getBigDecimal(DBColumnName.ACCOUNT_BALANCE_COLUMN);;
         } catch (SQLException e) {
             throw new DAOException(e);
         }
