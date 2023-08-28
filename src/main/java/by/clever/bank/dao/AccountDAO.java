@@ -8,6 +8,8 @@ import java.sql.SQLException;
 
 public interface AccountDAO {
 
-    boolean putMoneyToAccount(BigDecimal amount, String accountNumber, Connection connection) throws DAOException, SQLException;
+    BigDecimal selectBalance(Connection connection, String accountNumber) throws DAOException;
+
+    void addMoneyToBalance(Connection connection, BigDecimal newBalance, String accountNumber) throws DAOException;
 }
 

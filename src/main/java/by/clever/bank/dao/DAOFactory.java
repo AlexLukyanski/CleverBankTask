@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public final class DAOFactory {
 
-    private AccountDAO accountDAO = new AccountDAOImpl();
+    private final AccountDAO accountDAO = new AccountDAOImpl();
 
     private DAOFactory() {
     }

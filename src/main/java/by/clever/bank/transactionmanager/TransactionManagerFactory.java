@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public final class TransactionManagerFactory {
 
-    private AccountTransactionManager accountTransactionManager = new AccountTransactionManagerImpl();
+    private final AccountTransactionManager accountTransactionManager = new AccountTransactionManagerImpl();
 
     private TransactionManagerFactory() {
 

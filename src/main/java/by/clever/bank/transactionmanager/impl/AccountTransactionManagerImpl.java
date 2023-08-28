@@ -17,14 +17,27 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
     private final static AccountDAO accountDAO = DAOFactory.getInstance().getAccountDAO();
 
     @Override
-    public boolean putMoneyToAccount(BigDecimal amount, String accountNumber) throws TransactionManagerException {
+    public boolean putMoneyToAccount(BigDecimal amount, String accountNumber) throws SQLException, ConnectionPoolException {
 
-        try (Connection connection = ConnectionPool.getInstance().takeConnection()) {
+        Connection connection = ConnectionPool.getInstance().takeConnection();
+        BigDecimal balance;
+        BigDecimal newBalance;
 
-            accountDAO.putMoneyToAccount(amount, accountNumber, connection);
+        try {
+            connection.setAutoCommit(false);
+            balance = accountDAO.selectBalance(connection, accountNumber);
+            newBalance = balance.add(amount);
+            accountDAO.addMoneyToBalance(connection, newBalance, accountNumber);
+            connection.commit();
+            connection.setAutoCommit(true);
             return true;
-        } catch (DAOException | ConnectionPoolException | SQLException e) {
-            throw new TransactionManagerException(e);
+        } catch (DAOException | SQLException e) {
+            connection.rollback();
+            return false;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
 }

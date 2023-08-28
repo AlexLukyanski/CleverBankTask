@@ -1,5 +1,6 @@
 package by.clever.bank.controller;
 
+import by.clever.bank.controller.constant.RequestParam;
 import by.clever.bank.dao.connectionpool.ConnectionPool;
 import by.clever.bank.dao.connectionpool.ConnectionPoolException;
 import jakarta.servlet.ServletException;
@@ -14,6 +15,7 @@ public final class FrontController extends HttpServlet {
 
     @Serial
     private static final long serialVersionUID = 6765026817858525349L;
+    private static final CommandFactory commandFactory = new CommandFactory();
 
     public FrontController() {
         super();
@@ -46,5 +48,24 @@ public final class FrontController extends HttpServlet {
             throws ServletException, IOException {
 
 
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        executeRequest(request, response);
+    }
+
+    private void executeRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        final String contentType = "text/html";
+
+        response.setContentType(contentType);
+
+        String name = request.getParameter(RequestParam.FRONT_CONTROLLER_ATTRIBUTE);
+        Command command = commandFactory.getCommand(name);
+        command.execute(request, response);
     }
 }
