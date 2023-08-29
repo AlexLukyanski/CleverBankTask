@@ -118,8 +118,8 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
             accountDAO.changeBalance(connection, newReceiverBalance, receiverAccountNumber);
             senderAccountID = accountDAO.selectAccountID(connection, senderAccountNumber);
             receiverAccountID = accountDAO.selectAccountID(connection, receiverAccountNumber);
-            transactionDAO.saveTransactionData(connection, amount, TransactionType.TRANSFER_WITHIN_BANK, senderAccountID);
-            transactionDAO.saveTransactionData(connection, amount, TransactionType.TRANSFER_WITHIN_BANK, receiverAccountID);
+            transactionDAO.saveTransactionData(connection, amount, TransactionType.TRANSFER_BETWEEN_ACCOUNTS, senderAccountID);
+            transactionDAO.saveTransactionData(connection, amount, TransactionType.TRANSFER_BETWEEN_ACCOUNTS, receiverAccountID);
             connection.commit();
             connection.setAutoCommit(true);
             return true;
