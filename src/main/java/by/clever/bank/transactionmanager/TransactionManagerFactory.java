@@ -1,7 +1,9 @@
 package by.clever.bank.transactionmanager;
 
 import by.clever.bank.transactionmanager.impl.AccountTransactionManagerImpl;
+import lombok.Getter;
 
+@Getter
 public final class TransactionManagerFactory {
 
     private final AccountTransactionManager accountTransactionManager = new AccountTransactionManagerImpl();
@@ -12,10 +14,6 @@ public final class TransactionManagerFactory {
 
     public static TransactionManagerFactory getInstance() {
         return TransactionManagerFactoryHelper.instance;
-    }
-
-    public AccountTransactionManager getAccountTransactionManager() {
-        return accountTransactionManager;
     }
 
     public static class TransactionManagerFactoryHelper {
