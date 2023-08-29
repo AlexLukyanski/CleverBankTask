@@ -20,19 +20,44 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
     private final static TransactionDAO transactionDAO = DAOFactory.getInstance().getTransactionDAO();
 
     @Override
-    public boolean putMoneyToAccount(BigDecimal amount, String accountNumber) throws SQLException, ConnectionPoolException {
+    public boolean putMoneyToAccount(BigDecimal amount, String accountNumber) throws TransactionManagerException {
+        try {
+            return putMoneyTransaction(amount, accountNumber);
+        } catch (ConnectionPoolException | SQLException e) {
+            throw new TransactionManagerException(e);
+        }
+    }
+
+    @Override
+    public boolean withdrawMoneyFromAccount(BigDecimal amount, String accountNumber) throws TransactionManagerException {
+        try {
+            return withdrawMoneyTransaction(amount, accountNumber);
+        } catch (ConnectionPoolException | SQLException e) {
+            throw new TransactionManagerException(e);
+        }
+    }
+
+    @Override
+    public boolean transferMoneyBetweenAccounts(BigDecimal amount, String senderAccountNumber, String receiverAccountNumber) throws TransactionManagerException {
+        try {
+            return transferBetweenAccountsTransaction(amount, senderAccountNumber, receiverAccountNumber);
+        } catch (ConnectionPoolException | SQLException e) {
+            throw new TransactionManagerException(e);
+        }
+    }
+
+    private boolean putMoneyTransaction(BigDecimal amount, String accountNumber) throws SQLException, ConnectionPoolException, TransactionManagerException {
 
         Connection connection = ConnectionPool.getInstance().takeConnection();
         BigDecimal balance;
         BigDecimal newBalance;
         int accountID;
 
-
         try {
             connection.setAutoCommit(false);
             balance = accountDAO.selectBalance(connection, accountNumber);
             newBalance = balance.add(amount);
-            accountDAO.addMoneyToBalance(connection, newBalance, accountNumber);
+            accountDAO.changeBalance(connection, newBalance, accountNumber);
             accountID = accountDAO.selectAccountID(connection, accountNumber);
             transactionDAO.saveTransactionData(connection, amount, TransactionType.DEPOSIT, accountID);
             connection.commit();
@@ -48,9 +73,7 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
         }
     }
 
-    @Override
-    public boolean withdrawMoneyFromAccount(BigDecimal amount, String accountNumber) throws SQLException, ConnectionPoolException, TransactionManagerException {
-
+    private boolean withdrawMoneyTransaction(BigDecimal amount, String accountNumber) throws SQLException, ConnectionPoolException, TransactionManagerException {
         Connection connection = ConnectionPool.getInstance().takeConnection();
         BigDecimal balance;
         BigDecimal newBalance;
@@ -60,9 +83,43 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
             connection.setAutoCommit(false);
             balance = accountDAO.selectBalance(connection, accountNumber);
             newBalance = calculateBalanceAfterWithdraw(amount, balance);
-            accountDAO.addMoneyToBalance(connection, newBalance, accountNumber);
+            accountDAO.changeBalance(connection, newBalance, accountNumber);
             accountID = accountDAO.selectAccountID(connection, accountNumber);
-            transactionDAO.saveTransactionData(connection, amount, TransactionType.DEPOSIT, accountID);
+            transactionDAO.saveTransactionData(connection, amount, TransactionType.WITHDRAWAL, accountID);
+            connection.commit();
+            connection.setAutoCommit(true);
+            return true;
+        } catch (DAOException | SQLException e) {
+            connection.rollback();
+            return false;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
+    private boolean transferBetweenAccountsTransaction(BigDecimal amount, String senderAccountNumber, String receiverAccountNumber) throws SQLException, TransactionManagerException, ConnectionPoolException {
+        Connection connection = ConnectionPool.getInstance().takeConnection();
+        BigDecimal senderBalance;
+        BigDecimal newSenderBalance;
+        BigDecimal receiverBalance;
+        BigDecimal newReceiverBalance;
+        int senderAccountID;
+        int receiverAccountID;
+
+        try {
+            connection.setAutoCommit(false);
+            senderBalance = accountDAO.selectBalance(connection, senderAccountNumber);
+            newSenderBalance = calculateBalanceAfterWithdraw(amount, senderBalance);
+            accountDAO.changeBalance(connection, newSenderBalance, senderAccountNumber);
+            receiverBalance = accountDAO.selectBalance(connection, receiverAccountNumber);
+            newReceiverBalance = receiverBalance.add(amount);
+            accountDAO.changeBalance(connection, newReceiverBalance, receiverAccountNumber);
+            senderAccountID = accountDAO.selectAccountID(connection, senderAccountNumber);
+            receiverAccountID = accountDAO.selectAccountID(connection, receiverAccountNumber);
+            transactionDAO.saveTransactionData(connection, amount, TransactionType.TRANSFER_WITHIN_BANK, senderAccountID);
+            transactionDAO.saveTransactionData(connection, amount, TransactionType.TRANSFER_WITHIN_BANK, receiverAccountID);
             connection.commit();
             connection.setAutoCommit(true);
             return true;
@@ -83,8 +140,7 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
         if (subtractionResult >= 0) {
             return new BigDecimal(subtractionResult);
         } else {
-            throw new TransactionManagerException("Withdrawal not possible, insufficient funds");
+            throw new TransactionManagerException("Insufficient funds");
         }
-
     }
 }

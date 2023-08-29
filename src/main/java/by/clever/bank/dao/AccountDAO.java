@@ -11,7 +11,7 @@ public interface AccountDAO {
 
     int selectAccountID(Connection connection, String accountNumber) throws DAOException;
 
-    void addMoneyToBalance(Connection connection, BigDecimal newBalance, String accountNumber) throws DAOException;
+    void changeBalance(Connection connection, BigDecimal newBalance, String accountNumber) throws DAOException;
 
 }
 
