@@ -23,4 +23,13 @@ public class AccountServiceImpl implements AccountService {
             throw new ServiceException(e);
         }
     }
+
+    @Override
+    public boolean withdrawMoneyFromAccount(BigDecimal amount, String accountNumber) throws ServiceException {
+        try {
+            return transactionManager.withdrawMoneyFromAccount(amount, accountNumber);
+        } catch (TransactionManagerException | ConnectionPoolException | SQLException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

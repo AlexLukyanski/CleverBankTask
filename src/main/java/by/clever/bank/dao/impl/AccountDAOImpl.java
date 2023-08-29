@@ -44,7 +44,7 @@ public class AccountDAOImpl implements AccountDAO {
 
     private final static String PUT_MONEY_TO_ACCOUNT_SQL = "UPDATE account SET a_balance=? WHERE a_number=?";
 
-    public void changeBalance(Connection connection, BigDecimal newBalance, String accountNumber) throws DAOException {
+    public void addMoneyToBalance(Connection connection, BigDecimal newBalance, String accountNumber) throws DAOException {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(PUT_MONEY_TO_ACCOUNT_SQL)) {
             preparedStatement.setBigDecimal(1, newBalance);

@@ -9,4 +9,6 @@ import java.sql.SQLException;
 public interface AccountTransactionManager {
 
     public boolean putMoneyToAccount(BigDecimal amount, String accountNumber) throws TransactionManagerException, SQLException, ConnectionPoolException;
+
+    public boolean withdrawMoneyFromAccount(BigDecimal amount, String accountNumber) throws TransactionManagerException, SQLException, ConnectionPoolException;
 }
