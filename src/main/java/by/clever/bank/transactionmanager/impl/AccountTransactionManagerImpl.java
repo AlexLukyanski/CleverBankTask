@@ -48,8 +48,8 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
         }
     }
 
-
-    public boolean withdrawMoneyFromAccount(BigDecimal amount, String accountNumber) throws SQLException, ConnectionPoolException {
+    @Override
+    public boolean withdrawMoneyFromAccount(BigDecimal amount, String accountNumber) throws SQLException, ConnectionPoolException, TransactionManagerException {
 
         Connection connection = ConnectionPool.getInstance().takeConnection();
         BigDecimal balance;
@@ -80,7 +80,7 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
 
         int subtractionResult = balance.subtract(amount).intValue();
 
-        if (subtractionResult>=0){
+        if (subtractionResult >= 0) {
             return new BigDecimal(subtractionResult);
         } else {
             throw new TransactionManagerException("Withdrawal not possible, insufficient funds");
