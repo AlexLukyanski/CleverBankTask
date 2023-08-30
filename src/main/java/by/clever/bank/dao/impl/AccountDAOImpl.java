@@ -1,15 +1,15 @@
 package by.clever.bank.dao.impl;
 
+import by.clever.bank.bean.Account;
 import by.clever.bank.dao.AccountDAO;
 import by.clever.bank.dao.exception.DAOException;
 import by.clever.bank.dao.impl.constant.DBColumnName;
 
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountDAOImpl implements AccountDAO {
 
@@ -50,6 +50,30 @@ public class AccountDAOImpl implements AccountDAO {
             preparedStatement.setBigDecimal(1, newBalance);
             preparedStatement.setString(2, accountNumber);
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    private final static String SELECT_ALL_ACCOUNTS_SQL = "SELECT * from account";
+
+    @Override
+    public List<Account> selectIdAndNumberAndBalanceFromAllAccounts(Connection connection) throws DAOException {
+
+        try (Statement statement = connection.createStatement()) {
+
+            List<Account> accounts = new ArrayList<>();
+            ResultSet result = statement.executeQuery(SELECT_ALL_ACCOUNTS_SQL);
+
+            while (result.next()) {
+                Account account = new Account();
+
+                account.setId(result.getInt(DBColumnName.ACCOUNT_ID_COLUMN));
+                account.setNumber(result.getString(DBColumnName.ACCOUNT_NUMBER_COLUMN));
+                account.setBalance(result.getBigDecimal(DBColumnName.ACCOUNT_BALANCE_COLUMN));
+                accounts.add(account);
+            }
+            return accounts;
         } catch (SQLException e) {
             throw new DAOException(e);
         }

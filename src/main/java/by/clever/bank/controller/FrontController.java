@@ -1,5 +1,6 @@
 package by.clever.bank.controller;
 
+import by.clever.bank.controller.async.AccrualOfInterest;
 import by.clever.bank.controller.constant.RequestParam;
 import by.clever.bank.dao.connectionpool.ConnectionPool;
 import by.clever.bank.dao.connectionpool.ConnectionPoolException;
@@ -23,13 +24,8 @@ public final class FrontController extends HttpServlet {
 
     @Override
     public void init() {
-        try {
-            ConnectionPool instance = ConnectionPool.getInstance();
-            instance.initPoolData();
+        initializeConnectionPool();
 
-        } catch (ConnectionPoolException e) {
-//            log.log(Level.ERROR, "ConnectionPool broken", e);
-        }
     }
 
     @Override
@@ -66,5 +62,15 @@ public final class FrontController extends HttpServlet {
         String name = request.getParameter(RequestParam.FRONT_CONTROLLER_ATTRIBUTE);
         Command command = commandFactory.getCommand(name);
         command.execute(request, response);
+    }
+
+    private void initializeConnectionPool() {
+        try {
+            ConnectionPool instance = ConnectionPool.getInstance();
+            instance.initPoolData();
+
+        } catch (ConnectionPoolException e) {
+//            log.log(Level.ERROR, "ConnectionPool broken", e);
+        }
     }
 }

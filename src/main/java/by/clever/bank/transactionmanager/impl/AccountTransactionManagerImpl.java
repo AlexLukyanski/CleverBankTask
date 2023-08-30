@@ -1,5 +1,6 @@
 package by.clever.bank.transactionmanager.impl;
 
+import by.clever.bank.bean.Account;
 import by.clever.bank.bean.constant.TransactionType;
 import by.clever.bank.dao.AccountDAO;
 import by.clever.bank.dao.DAOFactory;
@@ -11,8 +12,10 @@ import by.clever.bank.transactionmanager.AccountTransactionManager;
 import by.clever.bank.transactionmanager.exception.TransactionManagerException;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 public class AccountTransactionManagerImpl implements AccountTransactionManager {
 
@@ -41,6 +44,15 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
     public boolean transferMoneyBetweenAccounts(BigDecimal amount, String senderAccountNumber, String receiverAccountNumber) throws TransactionManagerException {
         try {
             return transferBetweenAccountsTransaction(amount, senderAccountNumber, receiverAccountNumber);
+        } catch (ConnectionPoolException | SQLException e) {
+            throw new TransactionManagerException(e);
+        }
+    }
+
+    @Override
+    public void chargeAccrual(BigDecimal percentage) throws TransactionManagerException {
+        try {
+            chargeAccrualTransaction(percentage);
         } catch (ConnectionPoolException | SQLException e) {
             throw new TransactionManagerException(e);
         }
@@ -133,6 +145,26 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
         }
     }
 
+    private void chargeAccrualTransaction(BigDecimal percentage) throws SQLException, ConnectionPoolException {
+
+        Connection connection = ConnectionPool.getInstance().takeConnection();
+        List<Account> accounts;
+
+        try {
+            connection.setAutoCommit(false);
+            accounts = accountDAO.selectIdAndNumberAndBalanceFromAllAccounts(connection);
+            updateAllBalancesInAccounts(connection, accounts, percentage);
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch (DAOException | SQLException e) {
+            connection.rollback();
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
     private BigDecimal calculateBalanceAfterWithdraw(BigDecimal amount, BigDecimal balance) throws TransactionManagerException {
 
         int subtractionResult = balance.subtract(amount).intValue();
@@ -141,6 +173,23 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
             return new BigDecimal(subtractionResult);
         } else {
             throw new TransactionManagerException("Insufficient funds");
+        }
+    }
+
+    private void updateAllBalancesInAccounts(Connection connection, List<Account> accounts, BigDecimal percentage) throws DAOException {
+
+        BigDecimal numberFromPercentage = percentage
+                .setScale(4, RoundingMode.CEILING)
+                .divide(BigDecimal.valueOf(100));
+
+        for (Account account :
+                accounts) {
+
+            BigDecimal newBalance = account.getBalance()
+                    .setScale(2, RoundingMode.CEILING)
+                    .multiply(numberFromPercentage);
+
+            accountDAO.changeBalance(connection, newBalance, account.getNumber());
         }
     }
 }

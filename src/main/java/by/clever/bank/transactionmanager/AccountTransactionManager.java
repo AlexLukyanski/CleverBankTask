@@ -11,4 +11,6 @@ public interface AccountTransactionManager {
     boolean withdrawMoneyFromAccount(BigDecimal amount, String accountNumber) throws TransactionManagerException;
 
     boolean transferMoneyBetweenAccounts(BigDecimal amount, String senderAccountNumber, String receiverAccountNumber) throws TransactionManagerException;
+
+    void chargeAccrual(BigDecimal percentage) throws TransactionManagerException;
 }

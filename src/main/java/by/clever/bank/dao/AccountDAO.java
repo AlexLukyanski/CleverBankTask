@@ -1,9 +1,11 @@
 package by.clever.bank.dao;
 
+import by.clever.bank.bean.Account;
 import by.clever.bank.dao.exception.DAOException;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.util.List;
 
 public interface AccountDAO {
 
@@ -13,5 +15,6 @@ public interface AccountDAO {
 
     void changeBalance(Connection connection, BigDecimal newBalance, String accountNumber) throws DAOException;
 
+    List<Account> selectIdAndNumberAndBalanceFromAllAccounts(Connection connection) throws DAOException;
 }
 
