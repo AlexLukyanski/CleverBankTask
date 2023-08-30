@@ -11,7 +11,5 @@ public interface AccountService {
     boolean withdrawMoneyFromAccount(BigDecimal amount, String accountNumber) throws ServiceException;
 
     boolean transferMoneyBetweenAccounts(BigDecimal amount, String senderAccountNumber, String receiverAccountNumber) throws ServiceException;
-    boolean checkNecessity();
-    void chargeAccrual(BigDecimal percentage) throws ServiceException;
 
 }

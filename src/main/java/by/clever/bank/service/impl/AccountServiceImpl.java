@@ -7,12 +7,11 @@ import by.clever.bank.transactionmanager.TransactionManagerFactory;
 import by.clever.bank.transactionmanager.exception.TransactionManagerException;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class AccountServiceImpl implements AccountService {
 
     private final static AccountTransactionManager transactionManager = TransactionManagerFactory.getInstance().getAccountTransactionManager();
-    private int monthValue = LocalDateTime.now().getMonthValue();
+
 
     @Override
     public boolean putMoneyToAccount(BigDecimal amount, String accountNumber) throws ServiceException {
@@ -42,23 +41,4 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    @Override
-    public boolean checkNecessity() {
-        int currentMonthValue = LocalDateTime.now().getMonthValue();
-
-        if (currentMonthValue != monthValue) {
-            monthValue = currentMonthValue;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void chargeAccrual(BigDecimal percentage) throws ServiceException {
-        try {
-            transactionManager.chargeAccrual(percentage);
-        } catch (TransactionManagerException e) {
-            throw new ServiceException(e);
-        }
-    }
 }

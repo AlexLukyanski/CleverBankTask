@@ -1,9 +1,11 @@
 package by.clever.bank.controller;
 
-import by.clever.bank.controller.async.AccrualOfInterest;
 import by.clever.bank.controller.constant.RequestParam;
 import by.clever.bank.dao.connectionpool.ConnectionPool;
 import by.clever.bank.dao.connectionpool.ConnectionPoolException;
+import by.clever.bank.service.AccrualService;
+import by.clever.bank.service.ServiceFactory;
+import by.clever.bank.service.exception.ServiceException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +13,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.Serial;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 
 public final class FrontController extends HttpServlet {
 
@@ -25,7 +31,7 @@ public final class FrontController extends HttpServlet {
     @Override
     public void init() {
         initializeConnectionPool();
-
+        accrualOfInterest();
     }
 
     @Override
@@ -72,5 +78,24 @@ public final class FrontController extends HttpServlet {
         } catch (ConnectionPoolException e) {
 //            log.log(Level.ERROR, "ConnectionPool broken", e);
         }
+    }
+
+    private void accrualOfInterest() {
+
+        AccrualService accrualService = ServiceFactory.getInstance().getAccrualService();
+        int defaultThreadPoolSize = 2;
+
+        Runnable checkNecessity = accrualService::checkNecessity;
+        Runnable chargeAccrual = () -> {
+            try {
+                accrualService.chargeAccrual();
+            } catch (ServiceException e) {
+//                log.log(Level.ERROR, "Something broken", e);
+            }
+        };
+
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(defaultThreadPoolSize);
+        executorService.scheduleAtFixedRate(checkNecessity, 30, 30, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(chargeAccrual, 1, 1, TimeUnit.DAYS);
     }
 }
