@@ -8,6 +8,7 @@ import by.clever.bank.dao.TransactionDAO;
 import by.clever.bank.dao.connectionpool.ConnectionPool;
 import by.clever.bank.dao.connectionpool.ConnectionPoolException;
 import by.clever.bank.dao.exception.DAOException;
+import by.clever.bank.dto.Receipt;
 import by.clever.bank.transactionmanager.AccountTransactionManager;
 import by.clever.bank.transactionmanager.exception.TransactionManagerException;
 
@@ -15,6 +16,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class AccountTransactionManagerImpl implements AccountTransactionManager {
@@ -64,6 +67,10 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
         BigDecimal balance;
         BigDecimal newBalance;
         int accountID;
+        Timestamp dateTime;
+        int transactionID;
+        String bankName;
+        Receipt receipt;
 
         try {
             connection.setAutoCommit(false);
@@ -71,7 +78,12 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
             newBalance = balance.add(amount);
             accountDAO.changeBalance(connection, newBalance, accountNumber);
             accountID = accountDAO.selectAccountID(connection, accountNumber);
-            transactionDAO.saveTransactionData(connection, amount, TransactionType.DEPOSIT, accountID);
+            dateTime = Timestamp.valueOf(LocalDateTime.now());
+            transactionDAO.saveTransactionData(connection, amount, TransactionType.DEPOSIT, accountID, dateTime);
+            transactionID = transactionDAO.selectTransactionID(connection, amount, TransactionType.DEPOSIT, accountID, dateTime);
+            bankName = accountDAO.takeBankName(connection, accountID);
+            receipt = createDepositOrWithrawReceipt(transactionID, dateTime, TransactionType.DEPOSIT, bankName, accountNumber, amount);
+            transactionDAO.saveTransationToTXT(receipt);
             connection.commit();
             connection.setAutoCommit(true);
             return true;
@@ -86,10 +98,16 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
     }
 
     private boolean withdrawMoneyTransaction(BigDecimal amount, String accountNumber) throws SQLException, ConnectionPoolException, TransactionManagerException {
+
         Connection connection = ConnectionPool.getInstance().takeConnection();
         BigDecimal balance;
         BigDecimal newBalance;
         int accountID;
+        Timestamp dateTime;
+        int transactionID;
+        String bankName;
+        Receipt receipt;
+
 
         try {
             connection.setAutoCommit(false);
@@ -97,7 +115,12 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
             newBalance = calculateBalanceAfterWithdraw(amount, balance);
             accountDAO.changeBalance(connection, newBalance, accountNumber);
             accountID = accountDAO.selectAccountID(connection, accountNumber);
-            transactionDAO.saveTransactionData(connection, amount, TransactionType.WITHDRAWAL, accountID);
+            dateTime = Timestamp.valueOf(LocalDateTime.now());
+            transactionDAO.saveTransactionData(connection, amount, TransactionType.WITHDRAWAL, accountID, dateTime);
+            transactionID = transactionDAO.selectTransactionID(connection, amount, TransactionType.WITHDRAWAL, accountID, dateTime);
+            bankName = accountDAO.takeBankName(connection, accountID);
+            receipt = createDepositOrWithrawReceipt(transactionID, dateTime, TransactionType.WITHDRAWAL, bankName, accountNumber, amount);
+            transactionDAO.saveTransationToTXT(receipt);
             connection.commit();
             connection.setAutoCommit(true);
             return true;
@@ -112,6 +135,7 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
     }
 
     private boolean transferBetweenAccountsTransaction(BigDecimal amount, String senderAccountNumber, String receiverAccountNumber) throws SQLException, TransactionManagerException, ConnectionPoolException {
+
         Connection connection = ConnectionPool.getInstance().takeConnection();
         BigDecimal senderBalance;
         BigDecimal newSenderBalance;
@@ -119,6 +143,13 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
         BigDecimal newReceiverBalance;
         int senderAccountID;
         int receiverAccountID;
+        Timestamp dateTime;
+        int senderTransactionID;
+        int receiverTransactionID;
+        String senderBankName;
+        String receiverBankName;
+        Receipt senderReceipt;
+        Receipt receiverReceipt;
 
         try {
             connection.setAutoCommit(false);
@@ -130,8 +161,21 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
             accountDAO.changeBalance(connection, newReceiverBalance, receiverAccountNumber);
             senderAccountID = accountDAO.selectAccountID(connection, senderAccountNumber);
             receiverAccountID = accountDAO.selectAccountID(connection, receiverAccountNumber);
-            transactionDAO.saveTransactionData(connection, amount, TransactionType.TRANSFER_BETWEEN_ACCOUNTS, senderAccountID);
-            transactionDAO.saveTransactionData(connection, amount, TransactionType.TRANSFER_BETWEEN_ACCOUNTS, receiverAccountID);
+            dateTime = Timestamp.valueOf(LocalDateTime.now());
+            transactionDAO.saveTransactionData(connection, amount, TransactionType.TRANSFER_BETWEEN_ACCOUNTS, senderAccountID, dateTime);
+            transactionDAO.saveTransactionData(connection, amount, TransactionType.TRANSFER_BETWEEN_ACCOUNTS, receiverAccountID, dateTime);
+            senderTransactionID = transactionDAO.selectTransactionID(connection, amount, TransactionType.TRANSFER_BETWEEN_ACCOUNTS, senderAccountID, dateTime);
+            receiverTransactionID = transactionDAO.selectTransactionID(connection, amount, TransactionType.TRANSFER_BETWEEN_ACCOUNTS, receiverAccountID, dateTime);
+            senderBankName = accountDAO.takeBankName(connection, senderAccountID);
+            receiverBankName = accountDAO.takeBankName(connection, receiverAccountID);
+            senderReceipt = createTransferReceipt(senderTransactionID, dateTime,
+                    TransactionType.TRANSFER_BETWEEN_ACCOUNTS, senderBankName, receiverBankName,
+                    senderAccountNumber, receiverAccountNumber, amount);
+            receiverReceipt = createTransferReceipt(receiverTransactionID, dateTime,
+                    TransactionType.TRANSFER_BETWEEN_ACCOUNTS, senderBankName, receiverBankName,
+                    senderAccountNumber, receiverAccountNumber, amount);
+            transactionDAO.saveTransationToTXT(senderReceipt);
+            transactionDAO.saveTransationToTXT(receiverReceipt);
             connection.commit();
             connection.setAutoCommit(true);
             return true;
@@ -192,4 +236,32 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
             accountDAO.changeBalance(connection, newBalance, account.getNumber());
         }
     }
+
+    private Receipt createDepositOrWithrawReceipt(int transactionID, Timestamp dateTime, TransactionType type, String bankName, String accountNumber, BigDecimal amount) {
+        return new Receipt.ReceiptBuilder()
+                .id(transactionID)
+                .dateTime(dateTime.toLocalDateTime())
+                .type(type.toString())
+                .receiverBankName(bankName)
+                .receiverAccountNumber(accountNumber)
+                .amount(amount)
+                .build();
+    }
+
+    private Receipt createTransferReceipt(int senderTransactionID, Timestamp dateTime,
+                                          TransactionType type, String senderBankName, String receiverBankName,
+                                          String senderAccountNumber, String receiverAccountNumber, BigDecimal amount) {
+
+        return new Receipt.ReceiptBuilder()
+                .id(senderTransactionID)
+                .dateTime(dateTime.toLocalDateTime())
+                .type(type.toString())
+                .senderBankName(senderBankName)
+                .receiverBankName(receiverBankName)
+                .senderAccountNumber(senderAccountNumber)
+                .receiverAccountNumber(receiverAccountNumber)
+                .amount(amount)
+                .build();
+    }
+
 }

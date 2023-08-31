@@ -3,7 +3,8 @@ package by.clever.bank.dao.impl;
 import by.clever.bank.bean.Account;
 import by.clever.bank.dao.AccountDAO;
 import by.clever.bank.dao.exception.DAOException;
-import by.clever.bank.dao.impl.constant.DBColumnName;
+import by.clever.bank.dao.impl.constant.DBColumnAccountName;
+import by.clever.bank.dao.impl.constant.DBColumnBankName;
 
 
 import java.math.BigDecimal;
@@ -22,7 +23,7 @@ public class AccountDAOImpl implements AccountDAO {
             preparedStatement.setString(1, accountNumber);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            return resultSet.getBigDecimal(DBColumnName.ACCOUNT_BALANCE_COLUMN);
+            return resultSet.getBigDecimal(DBColumnAccountName.BALANCE_COLUMN);
         } catch (SQLException e) {
             throw new DAOException(e);
         }
@@ -36,7 +37,7 @@ public class AccountDAOImpl implements AccountDAO {
             preparedStatement.setString(1, accountNumber);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            return resultSet.getInt(DBColumnName.ACCOUNT_ID_COLUMN);
+            return resultSet.getInt(DBColumnAccountName.ID_COLUMN);
         } catch (SQLException e) {
             throw new DAOException(e);
         }
@@ -68,12 +69,28 @@ public class AccountDAOImpl implements AccountDAO {
             while (result.next()) {
                 Account account = new Account();
 
-                account.setId(result.getInt(DBColumnName.ACCOUNT_ID_COLUMN));
-                account.setNumber(result.getString(DBColumnName.ACCOUNT_NUMBER_COLUMN));
-                account.setBalance(result.getBigDecimal(DBColumnName.ACCOUNT_BALANCE_COLUMN));
+                account.setId(result.getInt(DBColumnAccountName.ID_COLUMN));
+                account.setNumber(result.getString(DBColumnAccountName.NUMBER_COLUMN));
+                account.setBalance(result.getBigDecimal(DBColumnAccountName.BALANCE_COLUMN));
                 accounts.add(account);
             }
             return accounts;
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    private final static String SELECT_ACCOUNT_BANK_NAME_SQL = "SELECT b_name from account JOIN bank ON " +
+            "(SELECT a_bank from account WHERE a_id=?)=b_id";
+
+    @Override
+    public String takeBankName(Connection connection, int accountID) throws DAOException {
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ACCOUNT_BANK_NAME_SQL)) {
+            preparedStatement.setInt(1, accountID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getString(DBColumnBankName.NAME_COLUMN);
         } catch (SQLException e) {
             throw new DAOException(e);
         }

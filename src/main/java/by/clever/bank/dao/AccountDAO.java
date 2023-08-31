@@ -16,5 +16,7 @@ public interface AccountDAO {
     void changeBalance(Connection connection, BigDecimal newBalance, String accountNumber) throws DAOException;
 
     List<Account> selectIdAndNumberAndBalanceFromAllAccounts(Connection connection) throws DAOException;
+
+    String takeBankName(Connection connection, int accountID) throws DAOException;
 }
 
