@@ -68,7 +68,6 @@ public class TransactionDAOImpl implements TransactionDAO {
 
             fileWriter.write(textToPrint);
             fileWriter.flush();
-            System.out.println(file.getAbsolutePath());
         } catch (IOException e) {
             throw new DAOException(e);
         }
@@ -78,8 +77,6 @@ public class TransactionDAOImpl implements TransactionDAO {
 
         String pathName;
         File file;
-
-        System.out.println(receipt.getId());
 
         pathName = new StringBuilder()
                 .append(receipt.getId())
