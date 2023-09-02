@@ -28,7 +28,6 @@ public final class FrontController extends HttpServlet {
     private static final CommandFactory commandFactory = new CommandFactory();
     private final static Logger log = LogManager.getRootLogger();
 
-
     public FrontController() {
         super();
     }

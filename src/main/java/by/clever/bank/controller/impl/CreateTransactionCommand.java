@@ -11,6 +11,9 @@ import by.clever.bank.service.exception.ServiceException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -19,6 +22,7 @@ import java.time.LocalDateTime;
 public class CreateTransactionCommand implements Command {
 
     private final static TransactionService transactionService = ServiceFactory.getInstance().getTransactionService();
+    private final static Logger log = LogManager.getRootLogger();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,6 +38,7 @@ public class CreateTransactionCommand implements Command {
                 response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
             }
         } catch (ServiceException e) {
+            log.log(Level.ERROR, "Something's wrong", e);
             response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
         }
     }

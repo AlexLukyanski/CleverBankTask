@@ -10,6 +10,9 @@ import by.clever.bank.service.exception.ServiceException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -17,6 +20,7 @@ import java.time.LocalDate;
 public class UpdateUserCommand implements Command {
 
     private final static UserService userService = ServiceFactory.getInstance().getUserService();
+    private final static Logger log = LogManager.getRootLogger();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,6 +36,7 @@ public class UpdateUserCommand implements Command {
                 response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
             }
         } catch (ServiceException e) {
+            log.log(Level.ERROR, "Something's wrong", e);
             response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
         }
     }
