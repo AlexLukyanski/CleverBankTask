@@ -17,6 +17,10 @@ public final class CommandFactory {
         commands.put(CommandName.ADD_NEW_BANK, new CreateBankCommand());
         commands.put(CommandName.UPDATE_BANK, new UpdateBankCommand());
         commands.put(CommandName.READ_BANK, new ReadBankCommand());
+        commands.put(CommandName.DELETE_BANK, new DeleteBankCommand());
+        commands.put(CommandName.ADD_NEW_USER, new CreateUserCommand());
+        commands.put(CommandName.UPDATE_USER, new UpdateUserCommand());
+        commands.put(CommandName.READ_USER, new ReadUserCommand());
     }
 
     public Command getCommand(String name) {
