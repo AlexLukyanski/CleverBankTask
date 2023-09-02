@@ -10,6 +10,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.Serial;
@@ -23,6 +26,8 @@ public final class FrontController extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 6765026817858525349L;
     private static final CommandFactory commandFactory = new CommandFactory();
+    private final static Logger log = LogManager.getRootLogger();
+
 
     public FrontController() {
         super();
@@ -41,7 +46,7 @@ public final class FrontController extends HttpServlet {
             ConnectionPool instance = ConnectionPool.getInstance();
             instance.clearConnectionQueue();
         } catch (ConnectionPoolException e) {
-//            log.log(Level.ERROR, "ConnectionPool broken", e);
+            log.log(Level.ERROR, "ConnectionPool broken", e);
         }
     }
 
@@ -54,6 +59,20 @@ public final class FrontController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        executeRequest(request, response);
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        executeRequest(request, response);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         executeRequest(request, response);
@@ -76,7 +95,7 @@ public final class FrontController extends HttpServlet {
             instance.initPoolData();
 
         } catch (ConnectionPoolException e) {
-//            log.log(Level.ERROR, "ConnectionPool broken", e);
+            log.log(Level.ERROR, "ConnectionPool broken", e);
         }
     }
 
@@ -90,7 +109,7 @@ public final class FrontController extends HttpServlet {
             try {
                 accrualService.chargeAccrual();
             } catch (ServiceException e) {
-//                log.log(Level.ERROR, "Something broken", e);
+                log.log(Level.ERROR, "Something broken", e);
             }
         };
 
