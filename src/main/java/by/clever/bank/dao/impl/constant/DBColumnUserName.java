@@ -1,5 +1,8 @@
 package by.clever.bank.dao.impl.constant;
 
+/**
+ * List of all columns in user DB table
+ */
 public final class DBColumnUserName {
 
     private DBColumnUserName(){

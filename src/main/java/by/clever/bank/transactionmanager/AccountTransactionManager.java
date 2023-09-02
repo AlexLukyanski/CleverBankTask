@@ -4,6 +4,9 @@ import by.clever.bank.transactionmanager.exception.TransactionManagerException;
 
 import java.math.BigDecimal;
 
+/**
+ * Interface to proceed all operations with transactions
+ */
 public interface AccountTransactionManager {
 
     boolean putMoneyToAccount(BigDecimal amount, String accountNumber) throws TransactionManagerException;

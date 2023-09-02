@@ -2,6 +2,9 @@ package by.clever.bank.transactionmanager.exception;
 
 import java.io.Serial;
 
+/**
+ * Class to handle exceptions in transaction manager. Just as it named
+ */
 public class TransactionManagerException extends Exception {
     @Serial
     private static final long serialVersionUID = -8112495250053228913L;

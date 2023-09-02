@@ -2,6 +2,9 @@ package by.clever.bank.dao.exception;
 
 import java.io.Serial;
 
+/**
+ * Class to handle exceptions in DAO. Just as it named
+ */
 public class DAOException extends Exception {
 
     @Serial

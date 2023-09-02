@@ -2,6 +2,9 @@ package by.clever.bank.dao.connectionpool;
 
 import java.util.ResourceBundle;
 
+/**
+ * Manage db.properties
+ */
 public class DBResourceManager {
 
 	private final static DBResourceManager instance = new DBResourceManager();

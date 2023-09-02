@@ -23,6 +23,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
+/**
+ * This class represent connection pool for JDBC. As simple as it looks.
+ */
 public final class ConnectionPool {
 
 	private BlockingQueue<Connection> freeConnectionQueue;
@@ -62,6 +65,10 @@ public final class ConnectionPool {
 
 	}
 
+	/**
+	 *
+	 * @throws ConnectionPoolException
+	 */
 	public void initPoolData() throws ConnectionPoolException {
 
 		try {
@@ -82,6 +89,10 @@ public final class ConnectionPool {
 		}
 	}
 
+	/**
+	 *
+	 * @throws ConnectionPoolException
+	 */
 	public void clearConnectionQueue() throws ConnectionPoolException {
 
 		closingConnectionFlag = true;
@@ -95,6 +106,11 @@ public final class ConnectionPool {
 		}
 	}
 
+	/**
+	 *
+	 * @return Connection
+	 * @throws ConnectionPoolException
+	 */
 	public Connection takeConnection() throws ConnectionPoolException {
 		Connection connection = null;
 
@@ -113,6 +129,13 @@ public final class ConnectionPool {
 		return connection;
 	}
 
+	/**
+	 *
+	 * @param con
+	 * @param st
+	 * @param rs
+	 * @throws ConnectionPoolException
+	 */
 	public void closeConnection(Connection con, Statement st, ResultSet rs) throws ConnectionPoolException {
 		try {
 			con.close();
@@ -133,6 +156,12 @@ public final class ConnectionPool {
 		}
 	}
 
+	/**
+	 *
+	 * @param con
+	 * @param ps
+	 * @throws ConnectionPoolException
+	 */
 	public void closeConnection(Connection con, PreparedStatement ps) throws ConnectionPoolException {
 		try {
 			con.close();
@@ -147,6 +176,13 @@ public final class ConnectionPool {
 		}
 	}
 
+	/**
+	 *
+	 * @param con
+	 * @param ps
+	 * @param rs
+	 * @throws ConnectionPoolException
+	 */
 	public void closeConnection(Connection con, PreparedStatement ps, ResultSet rs) throws ConnectionPoolException {
 		try {
 			con.close();
@@ -166,6 +202,12 @@ public final class ConnectionPool {
 		}
 	}
 
+	/**
+	 *
+	 * @param con
+	 * @param st
+	 * @throws ConnectionPoolException
+	 */
 	public void closeConnection(Connection con, Statement st) throws ConnectionPoolException {
 
 		try {
@@ -181,6 +223,11 @@ public final class ConnectionPool {
 		}
 	}
 
+	/**
+	 *
+	 * @param queue
+	 * @throws SQLException
+	 */
 	private void closeConnectionsQueue(BlockingQueue<Connection> queue) throws SQLException {
 
 		Connection connection;

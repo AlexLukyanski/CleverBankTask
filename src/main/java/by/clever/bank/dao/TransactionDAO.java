@@ -9,6 +9,9 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Timestamp;
 
+/**
+ * Interface to proceed all operations with Transaction entities in DAO
+ */
 public interface TransactionDAO {
 
     void saveTransactionData(Connection connection, BigDecimal amount, TransactionType type, int accountID, Timestamp dateTime) throws DAOException;

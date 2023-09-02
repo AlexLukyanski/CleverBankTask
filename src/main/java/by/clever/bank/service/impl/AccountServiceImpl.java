@@ -13,11 +13,21 @@ import by.clever.bank.transactionmanager.exception.TransactionManagerException;
 
 import java.math.BigDecimal;
 
+/**
+ * Class to proceed all operations with Account entities in service
+ */
 public class AccountServiceImpl implements AccountService {
 
     private final static AccountTransactionManager transactionManager = TransactionManagerFactory.getInstance().getAccountTransactionManager();
     private final static AccountDAO accountDAO = DAOFactory.getInstance().getAccountDAO();
 
+    /**
+     *
+     * @param amount
+     * @param accountNumber
+     * @return boolean if money was put
+     * @throws ServiceException
+     */
     @Override
     public boolean putMoneyToAccount(BigDecimal amount, String accountNumber) throws ServiceException {
 
@@ -32,6 +42,13 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    /**
+     *
+     * @param amount
+     * @param accountNumber
+     * @return boolean if money was withdrawn
+     * @throws ServiceException
+     */
     @Override
     public boolean withdrawMoneyFromAccount(BigDecimal amount, String accountNumber) throws ServiceException {
         try {
@@ -45,6 +62,14 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    /**
+     *
+     * @param amount
+     * @param senderAccountNumber
+     * @param receiverAccountNumber
+     * @return boolean if money was transferred
+     * @throws ServiceException
+     */
     @Override
     public boolean transferMoneyBetweenAccounts(BigDecimal amount, String senderAccountNumber, String receiverAccountNumber) throws ServiceException {
         try {
@@ -58,6 +83,14 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    /**
+     *
+     * @param account
+     * @param bankName
+     * @param userID
+     * @return boolean if account was created
+     * @throws ServiceException
+     */
     @Override
     public boolean createAccount(Account account, String bankName, int userID) throws ServiceException {
         try {
@@ -71,6 +104,13 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    /**
+     *
+     * @param oldAccount
+     * @param newAccount
+     * @return boolean if account was updated
+     * @throws ServiceException
+     */
     @Override
     public boolean updateAccount(Account oldAccount, Account newAccount) throws ServiceException {
         try {
@@ -84,6 +124,12 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    /**
+     *
+     * @param accountID
+     * @return account entity
+     * @throws ServiceException
+     */
     @Override
     public Account readAccount(int accountID) throws ServiceException {
         try {
@@ -97,6 +143,12 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    /**
+     *
+     * @param accountID
+     * @return boolean if account was deleted
+     * @throws ServiceException
+     */
     @Override
     public boolean deleteAccount(int accountID) throws ServiceException {
         try {

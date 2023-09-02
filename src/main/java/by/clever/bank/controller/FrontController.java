@@ -20,7 +20,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * The only servlet for this app. Delegate process requests to commands via CommandFactory
+ *
+ */
 public final class FrontController extends HttpServlet {
 
     @Serial
@@ -32,6 +35,9 @@ public final class FrontController extends HttpServlet {
         super();
     }
 
+    /**
+     * Initialize connection pool and two daemon threads here
+     */
     @Override
     public void init() {
         initializeConnectionPool();

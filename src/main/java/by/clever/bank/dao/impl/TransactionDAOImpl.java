@@ -18,11 +18,23 @@ import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Class to proceed all operations with Transaction entities in DAO
+ */
 public class TransactionDAOImpl implements TransactionDAO {
 
     private final static String INSERT_TRANSACTION_DATA_SQL = "INSERT INTO transactions" +
             "(t_type,t_datetime,t_amount,t_account) VALUES(?,?,?,?)";
 
+    /**
+     *
+     * @param connection
+     * @param amount
+     * @param type
+     * @param accountID
+     * @param dateTime
+     * @throws DAOException
+     */
     @Override
     public void saveTransactionData(Connection connection, BigDecimal amount, TransactionType type, int accountID, Timestamp dateTime) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_TRANSACTION_DATA_SQL)) {
@@ -39,6 +51,16 @@ public class TransactionDAOImpl implements TransactionDAO {
     private final static String SELECT_TRANSACTION_ID_SQL = "SELECT t_id from transactions" +
             " WHERE t_type=? AND t_datetime=? AND t_amount=? AND t_account=?";
 
+    /**
+     *
+     * @param connection
+     * @param amount
+     * @param type
+     * @param accountID
+     * @param dateTime
+     * @return transaction ID
+     * @throws DAOException
+     */
     @Override
     public int selectTransactionID(Connection connection, BigDecimal amount, TransactionType type, int accountID, Timestamp dateTime) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TRANSACTION_ID_SQL)) {
@@ -54,6 +76,11 @@ public class TransactionDAOImpl implements TransactionDAO {
         }
     }
 
+    /**
+     *
+     * @param receipt
+     * @throws DAOException
+     */
     @Override
     public void saveTransationToTXT(Receipt receipt) throws DAOException {
         File file = createFile(receipt);
@@ -75,6 +102,13 @@ public class TransactionDAOImpl implements TransactionDAO {
         }
     }
 
+    /**
+     *
+     * @param transaction
+     * @param accountID
+     * @return boolean if transaction was created
+     * @throws DAOException
+     */
     @Override
     public boolean createTransaction(Transaction transaction, int accountID) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();
@@ -102,6 +136,13 @@ public class TransactionDAOImpl implements TransactionDAO {
             "t_type=?,t_datetime=?,t_amount=?" +
             "WHERE t_id=?";
 
+    /**
+     *
+     * @param transaction
+     * @param transactionID
+     * @return boolean if transaction was updated
+     * @throws DAOException
+     */
     @Override
     public boolean updateTransaction(Transaction transaction, int transactionID) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();
@@ -126,6 +167,12 @@ public class TransactionDAOImpl implements TransactionDAO {
             "t_id,t_type,t_datetime,t_amount" +
             "FROM transactions WHERE t_id=?";
 
+    /**
+     *
+     * @param transactionID
+     * @return created transaction entity
+     * @throws DAOException
+     */
     @Override
     public Transaction readTransaction(int transactionID) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();
@@ -143,6 +190,12 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     private final static String DELETE_TRANSACTION_SQL = "DELETE FROM transactions WHERE t_id=?";
 
+    /**
+     *
+     * @param transactionID
+     * @return boolean if transaction was deleted
+     * @throws DAOException
+     */
     @Override
     public boolean deleteTransaction(int transactionID) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();

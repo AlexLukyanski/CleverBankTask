@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.List;
 
+/**
+ * Interface to proceed all operations with Account entities in DAO
+ */
 public interface AccountDAO {
 
     BigDecimal selectBalance(Connection connection, String accountNumber) throws DAOException;

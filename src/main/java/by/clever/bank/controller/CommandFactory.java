@@ -21,6 +21,9 @@ import by.clever.bank.controller.impl.update.UpdateUserCommand;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Factory for commands
+ */
 public final class CommandFactory {
 
     private final Map<CommandName, Command> commands = new HashMap<>();
@@ -48,6 +51,11 @@ public final class CommandFactory {
         commands.put(CommandName.DELETE_TRANSACTION, new DeleteTransactionCommand());
     }
 
+    /**
+     *
+     * @param name
+     * @return specified command
+     */
     public Command getCommand(String name) {
 
         CommandName commandName = CommandName.valueOf(name);

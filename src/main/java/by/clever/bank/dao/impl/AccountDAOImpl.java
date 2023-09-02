@@ -17,10 +17,19 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to proceed all operations with Account entities in DAO
+ */
 public class AccountDAOImpl implements AccountDAO {
 
     private final static String SELECT_BALANCE_FROM_ACCOUNT_SQL = "SELECT a_balance FROM account WHERE a_number=?";
 
+    /**
+     * @param connection
+     * @param accountNumber
+     * @return BigDecimal balance
+     * @throws DAOException
+     */
     @Override
     public BigDecimal selectBalance(Connection connection, String accountNumber) throws DAOException {
 
@@ -36,6 +45,12 @@ public class AccountDAOImpl implements AccountDAO {
 
     private final static String SELECT_ID_FROM_ACCOUNT_SQL = "SELECT a_id FROM account WHERE a_number=?";
 
+    /**
+     * @param connection
+     * @param accountNumber
+     * @return int account ID
+     * @throws DAOException
+     */
     @Override
     public int selectAccountID(Connection connection, String accountNumber) throws DAOException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID_FROM_ACCOUNT_SQL)) {
@@ -50,6 +65,12 @@ public class AccountDAOImpl implements AccountDAO {
 
     private final static String PUT_MONEY_TO_ACCOUNT_SQL = "UPDATE account SET a_balance=? WHERE a_number=?";
 
+    /**
+     * @param connection
+     * @param newBalance
+     * @param accountNumber
+     * @throws DAOException
+     */
     public void changeBalance(Connection connection, BigDecimal newBalance, String accountNumber) throws DAOException {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(PUT_MONEY_TO_ACCOUNT_SQL)) {
@@ -63,6 +84,11 @@ public class AccountDAOImpl implements AccountDAO {
 
     private final static String SELECT_ALL_ACCOUNTS_SQL = "SELECT * from account";
 
+    /**
+     * @param connection
+     * @return List of accounts
+     * @throws DAOException
+     */
     @Override
     public List<Account> selectIdAndNumberAndBalanceFromAllAccounts(Connection connection) throws DAOException {
 
@@ -88,6 +114,12 @@ public class AccountDAOImpl implements AccountDAO {
     private final static String SELECT_ACCOUNT_BANK_NAME_SQL = "SELECT b_name from account JOIN bank ON " +
             "(SELECT a_bank from account WHERE a_id=?)=b_id";
 
+    /**
+     * @param connection
+     * @param accountID
+     * @return Bank name
+     * @throws DAOException
+     */
     @Override
     public String takeBankName(Connection connection, int accountID) throws DAOException {
 
@@ -104,6 +136,13 @@ public class AccountDAOImpl implements AccountDAO {
     private final static String INSERT_NEW_ACCOUNT_SQL = "INSERT INTO account " +
             "(a_number,a_balance,a_bank,a_user) VALUES (?,?,?,?)";
 
+    /**
+     * @param account
+     * @param bankName
+     * @param userID
+     * @return boolean if account was created
+     * @throws DAOException
+     */
     @Override
     public boolean createAccount(Account account, String bankName, int userID) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();
@@ -134,6 +173,12 @@ public class AccountDAOImpl implements AccountDAO {
             " a_number=?,a_balance=?" +
             "WHERE a_id=(SELECT a_id FROM account WHERE a_number=?)";
 
+    /**
+     * @param oldAccount
+     * @param newAccount
+     * @return boolean if account was updated
+     * @throws DAOException
+     */
     @Override
     public boolean updateAccount(Account oldAccount, Account newAccount) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();
@@ -158,6 +203,11 @@ public class AccountDAOImpl implements AccountDAO {
             "a_id,a_number,a_balance,b_id,b_name " +
             "FROM users JOIN bank ON a_bank=b_id WHERE a_id=?";
 
+    /**
+     * @param accountID
+     * @return Account
+     * @throws DAOException
+     */
     @Override
     public Account readAccount(int accountID) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();
@@ -176,6 +226,11 @@ public class AccountDAOImpl implements AccountDAO {
 
     private final static String DELETE_ACCOUNT_SQL = "DELETE FROM account WHERE ui_id=?";
 
+    /**
+     * @param accountID
+     * @return boolean if account was deleted
+     * @throws DAOException
+     */
     @Override
     public boolean deleteAccount(int accountID) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();

@@ -1,5 +1,8 @@
 package by.clever.bank.controller;
 
+/**
+ * Contains list of all commands
+ */
 public enum CommandName {
     ADD_MONEY_TO_ACCOUNT, WITHDRAW_MONEY_FROM_ACCOUNT, TRANSFER_MONEY,
 

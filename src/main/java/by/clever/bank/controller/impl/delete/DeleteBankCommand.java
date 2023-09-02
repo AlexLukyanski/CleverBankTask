@@ -20,6 +20,13 @@ public class DeleteBankCommand implements Command {
     private final static BankService bankService = ServiceFactory.getInstance().getBankService();
     private final static Logger log = LogManager.getRootLogger();
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {

@@ -20,6 +20,13 @@ public class DeleteUserCommand implements Command {
     private final static UserService userService = ServiceFactory.getInstance().getUserService();
     private final static Logger log = LogManager.getRootLogger();
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {

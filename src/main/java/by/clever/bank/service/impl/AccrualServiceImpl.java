@@ -13,6 +13,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+/**
+ * class for specified daemon treads in service
+ */
 public class AccrualServiceImpl implements AccrualService {
 
     private int monthValue = LocalDateTime.now().getMonthValue();
@@ -29,6 +32,10 @@ public class AccrualServiceImpl implements AccrualService {
         }
     }
 
+    /**
+     *
+     * @throws ServiceException
+     */
     @Override
     public void chargeAccrual() throws ServiceException {
         try {

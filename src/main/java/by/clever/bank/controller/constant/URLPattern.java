@@ -1,5 +1,8 @@
 package by.clever.bank.controller.constant;
 
+/**
+ * Contains URL patterns for this project
+ */
 public final class URLPattern {
 
     private URLPattern() {

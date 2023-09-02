@@ -8,12 +8,20 @@ import by.clever.bank.dao.exception.DAOException;
 import by.clever.bank.dao.impl.constant.DBColumnUserName;
 
 import java.sql.*;
-
+/**
+ * Class to proceed all operations with User entities in DAO
+ */
 public class UserDAOImpl implements UserDAO {
 
     private final static String INSERT_NEW_USER_SQL = "INSERT INTO users " +
             "(ui_name,ui_surname,ui_patronymic,ui_dateofbirth,ui_phonenumber,ui_email) VALUES (?,?,?,?,?,?)";
 
+    /**
+     *
+     * @param user
+     * @return boolean if user was created
+     * @throws DAOException
+     */
     @Override
     public boolean createUser(User user) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();
@@ -41,6 +49,13 @@ public class UserDAOImpl implements UserDAO {
             " ui_name=?,ui_surname=?,ui_patronymic=?,ui_dateofbirth=?,ui_phonenumber=?,ui_email=?" +
             "WHERE ui_id=(SELECT ui_id FROM users WHERE ui_phonenumber=?)";
 
+    /**
+     *
+     * @param oldUser
+     * @param newUser
+     * @return boolean if user was updated
+     * @throws DAOException
+     */
     @Override
     public boolean updateUser(User oldUser, User newUser) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();
@@ -68,6 +83,12 @@ public class UserDAOImpl implements UserDAO {
             "ui_id,ui_name,ui_surname,ui_patronymic,ui_dateofbirth,ui_phonenumber,ui_email " +
             "FROM users WHERE ui_id=?";
 
+    /**
+     *
+     * @param userID
+     * @return user entity
+     * @throws DAOException
+     */
     @Override
     public User readUser(int userID) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();
@@ -85,6 +106,12 @@ public class UserDAOImpl implements UserDAO {
 
     private final static String DELETE_USER_SQL = "DELETE FROM users WHERE ui_id=?";
 
+    /**
+     *
+     * @param userID
+     * @return boolean if user was deleted
+     * @throws DAOException
+     */
     @Override
     public boolean deleteUser(int userID) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();

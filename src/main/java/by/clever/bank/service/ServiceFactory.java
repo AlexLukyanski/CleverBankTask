@@ -2,7 +2,9 @@ package by.clever.bank.service;
 
 import by.clever.bank.service.impl.*;
 import lombok.Getter;
-
+/**
+ * Factory for all Service classes
+ */
 @Getter
 public final class ServiceFactory {
 
@@ -16,6 +18,10 @@ public final class ServiceFactory {
 
     }
 
+    /**
+     *
+     * @return specified service
+     */
     public static ServiceFactory getInstance() {
         return ServiceFactoryHelper.instance;
     }

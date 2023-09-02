@@ -4,7 +4,9 @@ import by.clever.bank.bean.Account;
 import by.clever.bank.service.exception.ServiceException;
 
 import java.math.BigDecimal;
-
+/**
+ * Interface to proceed all operations with Account entities in service
+ */
 public interface AccountService {
 
     boolean putMoneyToAccount(BigDecimal amount, String accountNumber) throws ServiceException;

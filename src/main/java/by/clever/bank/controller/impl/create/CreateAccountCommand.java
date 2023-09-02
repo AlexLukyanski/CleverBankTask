@@ -22,6 +22,13 @@ public class CreateAccountCommand implements Command {
     private final static AccountService accountService = ServiceFactory.getInstance().getAccountService();
     private final static Logger log = LogManager.getRootLogger();
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account account = setAccount(request);

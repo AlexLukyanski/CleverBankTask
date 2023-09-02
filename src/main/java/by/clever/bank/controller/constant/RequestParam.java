@@ -1,5 +1,8 @@
 package by.clever.bank.controller.constant;
 
+/**
+ * Contain all parameters that can be put in request objects
+ */
 public final class RequestParam {
 
     private RequestParam() {

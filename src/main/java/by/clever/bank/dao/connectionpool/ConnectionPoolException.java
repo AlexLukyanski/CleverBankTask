@@ -2,6 +2,9 @@ package by.clever.bank.dao.connectionpool;
 
 import java.io.Serial;
 
+/**
+ * Class to handle exceptions in connection pool. Just as it named
+ */
 public class ConnectionPoolException extends Exception {
 
     @Serial

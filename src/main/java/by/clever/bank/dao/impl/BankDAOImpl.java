@@ -12,10 +12,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Class to proceed all operations with Bank entities in DAO
+ */
 public class BankDAOImpl implements BankDAO {
 
     private final static String INSERT_NEW_BANK_SQL = "INSERT INTO bank (b_name) VALUES (?)";
 
+    /**
+     * @param bank
+     * @return boolean if bank was created
+     * @throws DAOException
+     */
     @Override
     public boolean createBank(Bank bank) throws DAOException {
 
@@ -37,6 +45,12 @@ public class BankDAOImpl implements BankDAO {
 
     private final static String UPDATE_BANK_SQL = "UPDATE bank SET b_name=? WHERE b_id=(SELECT b_id FROM bank WHERE b_name=?)";
 
+    /**
+     * @param oldBank
+     * @param newBank
+     * @return boolean if bank was updated
+     * @throws DAOException
+     */
     @Override
     public boolean updateBank(Bank oldBank, Bank newBank) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();
@@ -57,6 +71,11 @@ public class BankDAOImpl implements BankDAO {
 
     private final static String SELECT_BANK_SQL = "SELECT b_id,b_name FROM bank WHERE b_name=?";
 
+    /**
+     * @param bankName
+     * @return Bank entity
+     * @throws DAOException
+     */
     @Override
     public Bank readBank(String bankName) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();
@@ -75,6 +94,11 @@ public class BankDAOImpl implements BankDAO {
 
     private final static String DELETE_BANK_SQL = "DELETE FROM bank WHERE b_name=?";
 
+    /**
+     * @param bankName
+     * @return boolean if bank was deleted
+     * @throws DAOException
+     */
     @Override
     public boolean deleteBank(String bankName) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().takeConnection();

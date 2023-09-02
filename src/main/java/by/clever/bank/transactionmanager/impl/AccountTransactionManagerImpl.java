@@ -20,11 +20,21 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Class to proceed all operations with transaction manager
+ */
 public class AccountTransactionManagerImpl implements AccountTransactionManager {
 
     private final static AccountDAO accountDAO = DAOFactory.getInstance().getAccountDAO();
     private final static TransactionDAO transactionDAO = DAOFactory.getInstance().getTransactionDAO();
 
+    /**
+     *
+     * @param amount
+     * @param accountNumber
+     * @return boolean if transaction was successful
+     * @throws TransactionManagerException
+     */
     @Override
     public boolean putMoneyToAccount(BigDecimal amount, String accountNumber) throws TransactionManagerException {
         try {
@@ -34,6 +44,13 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
         }
     }
 
+    /**
+     *
+     * @param amount
+     * @param accountNumber
+     * @return boolean if transaction was successful
+     * @throws TransactionManagerException
+     */
     @Override
     public boolean withdrawMoneyFromAccount(BigDecimal amount, String accountNumber) throws TransactionManagerException {
         try {
@@ -43,6 +60,14 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
         }
     }
 
+    /**
+     *
+     * @param amount
+     * @param senderAccountNumber
+     * @param receiverAccountNumber
+     * @return boolean if transaction was successful
+     * @throws TransactionManagerException
+     */
     @Override
     public boolean transferMoneyBetweenAccounts(BigDecimal amount, String senderAccountNumber, String receiverAccountNumber) throws TransactionManagerException {
         try {
@@ -52,6 +77,11 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
         }
     }
 
+    /**
+     *
+     * @param percentage
+     * @throws TransactionManagerException
+     */
     @Override
     public void chargeAccrual(BigDecimal percentage) throws TransactionManagerException {
         try {

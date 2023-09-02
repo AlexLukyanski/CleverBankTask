@@ -8,10 +8,19 @@ import by.clever.bank.service.BankService;
 import by.clever.bank.service.exception.ServiceException;
 import by.clever.bank.service.exception.ServiceValidationException;
 
+/**
+ * Class to proceed all operations with Bank entities in service
+ */
 public class BankServiceImpl implements BankService {
 
     private final static BankDAO bankDAO = DAOFactory.getInstance().getBankDAO();
 
+    /**
+     *
+     * @param bank
+     * @return boolean if bank was created
+     * @throws ServiceException
+     */
     @Override
     public boolean createBank(Bank bank) throws ServiceException {
 
@@ -26,6 +35,13 @@ public class BankServiceImpl implements BankService {
         }
     }
 
+    /**
+     *
+     * @param oldBank
+     * @param newBank
+     * @return boolean if bank was updated
+     * @throws ServiceException
+     */
     @Override
     public boolean updateBank(Bank oldBank, Bank newBank) throws ServiceException {
         try {
@@ -39,6 +55,12 @@ public class BankServiceImpl implements BankService {
         }
     }
 
+    /**
+     *
+     * @param bankName
+     * @return bank entity
+     * @throws ServiceException
+     */
     @Override
     public Bank readBank(String bankName) throws ServiceException {
         try {
@@ -52,6 +74,12 @@ public class BankServiceImpl implements BankService {
         }
     }
 
+    /**
+     *
+     * @param bankName
+     * @return boolean if bank was deleted
+     * @throws ServiceException
+     */
     @Override
     public boolean deleteBank(String bankName) throws ServiceException {
         try {

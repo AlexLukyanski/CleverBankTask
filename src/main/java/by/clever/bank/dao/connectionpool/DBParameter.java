@@ -1,5 +1,8 @@
 package by.clever.bank.dao.connectionpool;
 
+/**
+ * Parameters for db.properties
+ */
 public final class DBParameter {
 	
 		

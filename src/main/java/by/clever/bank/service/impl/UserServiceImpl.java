@@ -8,10 +8,19 @@ import by.clever.bank.service.UserService;
 import by.clever.bank.service.exception.ServiceException;
 import by.clever.bank.service.exception.ServiceValidationException;
 
+/**
+ * Class to proceed all operations with User entities in service
+ */
 public class UserServiceImpl implements UserService {
 
     private final static UserDAO userDao = DAOFactory.getInstance().getUserDAO();
 
+    /**
+     *
+     * @param user
+     * @return boolean if user was created
+     * @throws ServiceException
+     */
     @Override
     public boolean createUser(User user) throws ServiceException {
         try {
@@ -25,6 +34,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     *
+     * @param oldUser
+     * @param newUser
+     * @return boolean if user was updated
+     * @throws ServiceException
+     */
     @Override
     public boolean updateUser(User oldUser, User newUser) throws ServiceException {
         try {
@@ -38,6 +54,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     *
+     * @param userID
+     * @return user entity
+     * @throws ServiceException
+     */
     @Override
     public User readUser(int userID) throws ServiceException {
         try {
@@ -51,6 +73,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     *
+     * @param userID
+     * @return boolean if user was deleted
+     * @throws ServiceException
+     */
     @Override
     public boolean deleteUser(int userID) throws ServiceException {
         try {

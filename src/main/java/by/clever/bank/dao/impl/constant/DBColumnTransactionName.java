@@ -1,5 +1,8 @@
 package by.clever.bank.dao.impl.constant;
 
+/**
+ * List of all columns in transaction DB table
+ */
 public final class DBColumnTransactionName {
 
     private DBColumnTransactionName (){

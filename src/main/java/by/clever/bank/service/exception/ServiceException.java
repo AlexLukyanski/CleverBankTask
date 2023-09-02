@@ -2,6 +2,9 @@ package by.clever.bank.service.exception;
 
 import java.io.Serial;
 
+/**
+ * Class to handle exceptions in service. Just as it named
+ */
 public class ServiceException extends Exception {
 
     @Serial

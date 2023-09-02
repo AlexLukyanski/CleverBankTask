@@ -22,6 +22,13 @@ public class ReadTransactionCommand implements Command {
     private final static TransactionService transactionService = ServiceFactory.getInstance().getTransactionService();
     private final static Logger log = LogManager.getRootLogger();
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {

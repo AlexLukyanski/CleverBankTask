@@ -6,6 +6,9 @@ import by.clever.bank.dao.impl.TransactionDAOImpl;
 import by.clever.bank.dao.impl.UserDAOImpl;
 import lombok.Getter;
 
+/**
+ * Factory for all DAO classes
+ */
 @Getter
 public final class DAOFactory {
 
@@ -17,6 +20,10 @@ public final class DAOFactory {
     private DAOFactory() {
     }
 
+    /**
+     *
+     * @return DAOFactory
+     */
     public static DAOFactory getInstance() {
         return DAOFactoryHelper.instance;
     }

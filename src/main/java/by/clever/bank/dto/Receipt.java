@@ -3,7 +3,9 @@ package by.clever.bank.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
+/**
+ * DTO class for receipts of fulfilled transactions
+ */
 public class Receipt {
     private final String title;
     private final int id;

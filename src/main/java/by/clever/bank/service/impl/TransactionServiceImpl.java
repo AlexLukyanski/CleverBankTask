@@ -8,10 +8,20 @@ import by.clever.bank.service.TransactionService;
 import by.clever.bank.service.exception.ServiceException;
 import by.clever.bank.service.exception.ServiceValidationException;
 
+/**
+ * Class to proceed all operations with Transaction entities in service
+ */
 public class TransactionServiceImpl implements TransactionService {
 
     private final static TransactionDAO transactionDAO = DAOFactory.getInstance().getTransactionDAO();
 
+    /**
+     *
+     * @param transaction
+     * @param accountID
+     * @return boolean if transaction was created
+     * @throws ServiceException
+     */
     @Override
     public boolean createTransaction(Transaction transaction, int accountID) throws ServiceException {
         try {
@@ -25,6 +35,13 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
+    /**
+     *
+     * @param transaction
+     * @param transactionID
+     * @return boolean if transaction was updated
+     * @throws ServiceException
+     */
     @Override
     public boolean updateTransaction(Transaction transaction, int transactionID) throws ServiceException {
         try {
@@ -38,6 +55,12 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
+    /**
+     *
+     * @param transactionID
+     * @return transaction entity
+     * @throws ServiceException
+     */
     @Override
     public Transaction readTransaction(int transactionID) throws ServiceException {
         try {
@@ -51,6 +74,12 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
+    /**
+     *
+     * @param transactionID
+     * @return boolean if transaction was deleted
+     * @throws ServiceException
+     */
     @Override
     public boolean deleteTransaction(int transactionID) throws ServiceException {
         try {
