@@ -1,6 +1,22 @@
 package by.clever.bank.controller;
 
 import by.clever.bank.controller.impl.*;
+import by.clever.bank.controller.impl.create.CreateAccountCommand;
+import by.clever.bank.controller.impl.create.CreateBankCommand;
+import by.clever.bank.controller.impl.create.CreateTransactionCommand;
+import by.clever.bank.controller.impl.create.CreateUserCommand;
+import by.clever.bank.controller.impl.delete.DeleteAccountCommand;
+import by.clever.bank.controller.impl.delete.DeleteBankCommand;
+import by.clever.bank.controller.impl.delete.DeleteTransactionCommand;
+import by.clever.bank.controller.impl.delete.DeleteUserCommand;
+import by.clever.bank.controller.impl.read.ReadAccountCommand;
+import by.clever.bank.controller.impl.read.ReadBankCommand;
+import by.clever.bank.controller.impl.read.ReadTransactionCommand;
+import by.clever.bank.controller.impl.read.ReadUserCommand;
+import by.clever.bank.controller.impl.update.UpdateAccountCommand;
+import by.clever.bank.controller.impl.update.UpdateBankCommand;
+import by.clever.bank.controller.impl.update.UpdateTransactionCommand;
+import by.clever.bank.controller.impl.update.UpdateUserCommand;
 
 import java.util.HashMap;
 import java.util.Map;

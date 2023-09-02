@@ -1,11 +1,13 @@
-package by.clever.bank.controller.impl;
+package by.clever.bank.controller.impl.read;
 
+import by.clever.bank.bean.Account;
 import by.clever.bank.controller.Command;
 import by.clever.bank.controller.constant.RequestParam;
 import by.clever.bank.controller.constant.URLPattern;
 import by.clever.bank.service.AccountService;
 import by.clever.bank.service.ServiceFactory;
 import by.clever.bank.service.exception.ServiceException;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class DeleteAccountCommand implements Command {
+public class ReadAccountCommand implements Command {
 
     private final static AccountService accountService = ServiceFactory.getInstance().getAccountService();
     private final static Logger log = LogManager.getRootLogger();
@@ -23,10 +25,19 @@ public class DeleteAccountCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            boolean executionResult = accountService.deleteAccount(Integer.parseInt(RequestParam.ACCOUNT_ID));
+            Account account = accountService.readAccount(Integer.parseInt(request.getParameter(RequestParam.ACCOUNT_ID)));
 
-            if (executionResult) {
-                response.sendRedirect(URLPattern.URL_TO_GOOD_PAGE);
+            if (account != null) {
+
+                request.setAttribute(RequestParam.KEY_TO_ACCOUNT_BEAN, account);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(URLPattern.URL_TO_GOOD_PAGE);
+
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(request, response);
+                } else {
+                    response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
+                }
+
             } else {
                 response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
             }

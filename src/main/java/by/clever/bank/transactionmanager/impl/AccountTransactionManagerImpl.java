@@ -74,6 +74,7 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
 
         try {
             connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             balance = accountDAO.selectBalance(connection, accountNumber);
             newBalance = balance.add(amount);
             accountDAO.changeBalance(connection, newBalance, accountNumber);
@@ -85,6 +86,7 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
             transactionDAO.saveTransationToTXT(receipt);
             transactionDAO.saveTransactionData(connection, amount, TransactionType.DEPOSIT, accountID, dateTime);
             connection.commit();
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             connection.setAutoCommit(true);
             return true;
         } catch (DAOException | SQLException e) {
@@ -111,6 +113,7 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
 
         try {
             connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             balance = accountDAO.selectBalance(connection, accountNumber);
             newBalance = calculateBalanceAfterWithdraw(amount, balance);
             accountDAO.changeBalance(connection, newBalance, accountNumber);
@@ -122,6 +125,7 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
             receipt = createDepositOrWithrawReceipt(transactionID, dateTime, TransactionType.WITHDRAWAL, bankName, accountNumber, amount);
             transactionDAO.saveTransationToTXT(receipt);
             connection.commit();
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             connection.setAutoCommit(true);
             return true;
         } catch (DAOException | SQLException e) {
@@ -153,6 +157,7 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
 
         try {
             connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             senderBalance = accountDAO.selectBalance(connection, senderAccountNumber);
             newSenderBalance = calculateBalanceAfterWithdraw(amount, senderBalance);
             accountDAO.changeBalance(connection, newSenderBalance, senderAccountNumber);
@@ -177,6 +182,7 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
             transactionDAO.saveTransationToTXT(senderReceipt);
             transactionDAO.saveTransationToTXT(receiverReceipt);
             connection.commit();
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             connection.setAutoCommit(true);
             return true;
         } catch (DAOException | SQLException e) {
@@ -196,9 +202,11 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
 
         try {
             connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             accounts = accountDAO.selectIdAndNumberAndBalanceFromAllAccounts(connection);
             updateAllBalancesInAccounts(connection, accounts, percentage);
             connection.commit();
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             connection.setAutoCommit(true);
         } catch (DAOException | SQLException e) {
             connection.rollback();

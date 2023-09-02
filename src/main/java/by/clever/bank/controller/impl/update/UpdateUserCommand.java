@@ -1,4 +1,4 @@
-package by.clever.bank.controller.impl;
+package by.clever.bank.controller.impl.update;
 
 import by.clever.bank.bean.User;
 import by.clever.bank.controller.Command;

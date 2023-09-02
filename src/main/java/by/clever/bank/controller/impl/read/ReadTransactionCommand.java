@@ -1,11 +1,11 @@
-package by.clever.bank.controller.impl;
+package by.clever.bank.controller.impl.read;
 
-import by.clever.bank.bean.Bank;
+import by.clever.bank.bean.Transaction;
 import by.clever.bank.controller.Command;
 import by.clever.bank.controller.constant.RequestParam;
 import by.clever.bank.controller.constant.URLPattern;
-import by.clever.bank.service.BankService;
 import by.clever.bank.service.ServiceFactory;
+import by.clever.bank.service.TransactionService;
 import by.clever.bank.service.exception.ServiceException;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -17,20 +17,19 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class ReadBankCommand implements Command {
+public class ReadTransactionCommand implements Command {
 
-    private final static BankService bankService = ServiceFactory.getInstance().getBankService();
+    private final static TransactionService transactionService = ServiceFactory.getInstance().getTransactionService();
     private final static Logger log = LogManager.getRootLogger();
-
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            Bank bank = bankService.readBank(request.getParameter(RequestParam.KEY_TO_BANK_NAME));
+            Transaction transaction = transactionService.readTransaction(Integer.parseInt(request.getParameter(RequestParam.TRANSACTION_ID)));
 
-            if (bank != null) {
+            if (transaction != null) {
 
-                request.setAttribute(RequestParam.KEY_TO_BANK_BEAN, bank);
+                request.setAttribute(RequestParam.KEY_TO_TRANSACTION_BEAN, transaction);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(URLPattern.URL_TO_GOOD_PAGE);
 
                 if (requestDispatcher != null) {
@@ -40,7 +39,6 @@ public class ReadBankCommand implements Command {
                 }
 
             } else {
-
                 response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
             }
         } catch (ServiceException e) {

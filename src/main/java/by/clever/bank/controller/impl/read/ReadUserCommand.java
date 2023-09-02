@@ -1,12 +1,13 @@
-package by.clever.bank.controller.impl;
+package by.clever.bank.controller.impl.read;
 
-import by.clever.bank.bean.Account;
+import by.clever.bank.bean.User;
 import by.clever.bank.controller.Command;
 import by.clever.bank.controller.constant.RequestParam;
 import by.clever.bank.controller.constant.URLPattern;
-import by.clever.bank.service.AccountService;
 import by.clever.bank.service.ServiceFactory;
+import by.clever.bank.service.UserService;
 import by.clever.bank.service.exception.ServiceException;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,24 +16,28 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
-public class CreateAccountCommand implements Command {
+public class ReadUserCommand implements Command {
 
-    private final static AccountService accountService = ServiceFactory.getInstance().getAccountService();
+    private final static UserService userService = ServiceFactory.getInstance().getUserService();
     private final static Logger log = LogManager.getRootLogger();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Account account = setAccount(request);
-        String bankName = request.getParameter(RequestParam.ACCOUNT_BANK_NAME);
-        int userID = Integer.parseInt(request.getParameter(RequestParam.USER_ID));
-
         try {
-            boolean executionResult = accountService.createAccount(account, bankName, userID);
+            User user = userService.readUser(Integer.parseInt(request.getParameter(RequestParam.USER_ID)));
 
-            if (executionResult) {
-                response.sendRedirect(URLPattern.URL_TO_GOOD_PAGE);
+            if (user != null) {
+
+                request.setAttribute(RequestParam.KEY_TO_USER_BEAN, user);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(URLPattern.URL_TO_GOOD_PAGE);
+
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(request, response);
+                } else {
+                    response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
+                }
+
             } else {
                 response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
             }
@@ -40,14 +45,5 @@ public class CreateAccountCommand implements Command {
             log.log(Level.ERROR, "Something's wrong", e);
             response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
         }
-    }
-
-
-    private Account setAccount(HttpServletRequest request) {
-
-        Account account = new Account();
-        account.setNumber(request.getParameter(RequestParam.NEW_ACCOUNT_NUMBER));
-        account.setBalance(new BigDecimal(request.getParameter(RequestParam.NEW_ACCOUNT_BALANCE)));
-        return account;
     }
 }

@@ -1,12 +1,11 @@
-package by.clever.bank.controller.impl;
+package by.clever.bank.controller.impl.create;
 
-import by.clever.bank.bean.Transaction;
-import by.clever.bank.bean.constant.TransactionType;
+import by.clever.bank.bean.Account;
 import by.clever.bank.controller.Command;
 import by.clever.bank.controller.constant.RequestParam;
 import by.clever.bank.controller.constant.URLPattern;
+import by.clever.bank.service.AccountService;
 import by.clever.bank.service.ServiceFactory;
-import by.clever.bank.service.TransactionService;
 import by.clever.bank.service.exception.ServiceException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,20 +16,20 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-public class UpdateTransactionCommand implements Command {
+public class CreateAccountCommand implements Command {
 
-    private final static TransactionService transactionService = ServiceFactory.getInstance().getTransactionService();
+    private final static AccountService accountService = ServiceFactory.getInstance().getAccountService();
     private final static Logger log = LogManager.getRootLogger();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Transaction transaction = setTransaction(request);
-        int transactionID = Integer.parseInt(request.getParameter(RequestParam.TRANSACTION_ID));
+        Account account = setAccount(request);
+        String bankName = request.getParameter(RequestParam.ACCOUNT_BANK_NAME);
+        int userID = Integer.parseInt(request.getParameter(RequestParam.USER_ID));
 
         try {
-            boolean executionResult = transactionService.updateTransaction(transaction, transactionID);
+            boolean executionResult = accountService.createAccount(account, bankName, userID);
 
             if (executionResult) {
                 response.sendRedirect(URLPattern.URL_TO_GOOD_PAGE);
@@ -43,11 +42,12 @@ public class UpdateTransactionCommand implements Command {
         }
     }
 
-    private Transaction setTransaction(HttpServletRequest request) {
-        Transaction transaction = new Transaction();
-        transaction.setType(TransactionType.valueOf(request.getParameter(RequestParam.NEW_TRANSACTION_TYPE)));
-        transaction.setDateTime(LocalDateTime.parse(request.getParameter(RequestParam.NEW_TRANSACTION_DATETIME)));
-        transaction.setAmount(new BigDecimal(request.getParameter(RequestParam.NEW_TRANSACTION_AMOUNT)));
-        return transaction;
+
+    private Account setAccount(HttpServletRequest request) {
+
+        Account account = new Account();
+        account.setNumber(request.getParameter(RequestParam.NEW_ACCOUNT_NUMBER));
+        account.setBalance(new BigDecimal(request.getParameter(RequestParam.NEW_ACCOUNT_BALANCE)));
+        return account;
     }
 }

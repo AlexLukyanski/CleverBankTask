@@ -1,10 +1,10 @@
-package by.clever.bank.controller.impl;
+package by.clever.bank.controller.impl.update;
 
-import by.clever.bank.bean.Account;
+import by.clever.bank.bean.Bank;
 import by.clever.bank.controller.Command;
 import by.clever.bank.controller.constant.RequestParam;
 import by.clever.bank.controller.constant.URLPattern;
-import by.clever.bank.service.AccountService;
+import by.clever.bank.service.BankService;
 import by.clever.bank.service.ServiceFactory;
 import by.clever.bank.service.exception.ServiceException;
 import jakarta.servlet.ServletException;
@@ -15,20 +15,20 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
-public class UpdateAccountCommand implements Command {
+public class UpdateBankCommand implements Command {
 
-    private final static AccountService accountService = ServiceFactory.getInstance().getAccountService();
+    private final static BankService bankService = ServiceFactory.getInstance().getBankService();
     private final static Logger log = LogManager.getRootLogger();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Account oldAccount = setOldAccount(request);
-        Account newAccount = setNewAccount(request);
+
+        Bank oldBank = setOldBank(request);
+        Bank newBank = setNewBank(request);
 
         try {
-            boolean executionResult = accountService.updateAccount(oldAccount, newAccount);
+            boolean executionResult = bankService.updateBank(oldBank, newBank);
 
             if (executionResult) {
                 response.sendRedirect(URLPattern.URL_TO_GOOD_PAGE);
@@ -41,19 +41,17 @@ public class UpdateAccountCommand implements Command {
         }
     }
 
-    private Account setOldAccount(HttpServletRequest request) {
+    private Bank setOldBank(HttpServletRequest request) {
 
-        Account account = new Account();
-        account.setNumber(request.getParameter(RequestParam.NEW_ACCOUNT_NUMBER));
-        account.setBalance(new BigDecimal(request.getParameter(RequestParam.NEW_ACCOUNT_BALANCE)));
-        return account;
+        Bank bank = new Bank();
+        bank.setName(request.getParameter(RequestParam.OLD_BANK_NAME));
+        return bank;
     }
 
-    private Account setNewAccount(HttpServletRequest request) {
+    private Bank setNewBank(HttpServletRequest request) {
 
-        Account account = new Account();
-        account.setNumber(request.getParameter(RequestParam.OLD_ACCOUNT_NUMBER));
-        account.setBalance(new BigDecimal(request.getParameter(RequestParam.OLD_ACCOUNT_BALANCE)));
-        return account;
+        Bank bank = new Bank();
+        bank.setName(request.getParameter(RequestParam.NEW_BANK_NAME));
+        return bank;
     }
 }
