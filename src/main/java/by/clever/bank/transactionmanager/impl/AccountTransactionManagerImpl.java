@@ -79,11 +79,11 @@ public class AccountTransactionManagerImpl implements AccountTransactionManager 
             accountDAO.changeBalance(connection, newBalance, accountNumber);
             accountID = accountDAO.selectAccountID(connection, accountNumber);
             dateTime = Timestamp.valueOf(LocalDateTime.now());
-            transactionDAO.saveTransactionData(connection, amount, TransactionType.DEPOSIT, accountID, dateTime);
             transactionID = transactionDAO.selectTransactionID(connection, amount, TransactionType.DEPOSIT, accountID, dateTime);
             bankName = accountDAO.takeBankName(connection, accountID);
             receipt = createDepositOrWithrawReceipt(transactionID, dateTime, TransactionType.DEPOSIT, bankName, accountNumber, amount);
             transactionDAO.saveTransationToTXT(receipt);
+            transactionDAO.saveTransactionData(connection, amount, TransactionType.DEPOSIT, accountID, dateTime);
             connection.commit();
             connection.setAutoCommit(true);
             return true;

@@ -12,8 +12,11 @@ public final class CommandFactory {
     public CommandFactory() {
 
         commands.put(CommandName.ADD_MONEY_TO_ACCOUNT, new AddMoneyToAccountCommand());
-        commands.put(CommandName.WITHDRAW_MONEY_FROM_ACCOUNT, new WithdrawMoneyFromAccount());
-        commands.put(CommandName.TRANSFER_MONEY, new TransferMoneyBetweenAccounts());
+        commands.put(CommandName.WITHDRAW_MONEY_FROM_ACCOUNT, new WithdrawMoneyFromAccountCommand());
+        commands.put(CommandName.TRANSFER_MONEY, new TransferMoneyBetweenAccountsCommand());
+        commands.put(CommandName.ADD_NEW_BANK, new CreateBankCommand());
+        commands.put(CommandName.UPDATE_BANK, new UpdateBankCommand());
+        commands.put(CommandName.READ_BANK, new ReadBankCommand());
     }
 
     public Command getCommand(String name) {

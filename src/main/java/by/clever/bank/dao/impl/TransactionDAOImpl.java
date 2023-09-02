@@ -66,6 +66,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 
         try (FileWriter fileWriter = new FileWriter(file, StandardCharsets.UTF_8)) {
 
+
             fileWriter.write(textToPrint);
             fileWriter.flush();
         } catch (IOException e) {

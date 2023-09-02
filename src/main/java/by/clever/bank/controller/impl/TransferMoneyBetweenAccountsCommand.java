@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class TransferMoneyBetweenAccounts implements Command {
+public class TransferMoneyBetweenAccountsCommand implements Command {
     private final static AccountService accountService = ServiceFactory.getInstance().getAccountService();
 
     @Override
@@ -26,7 +26,7 @@ public class TransferMoneyBetweenAccounts implements Command {
             boolean executionResult = accountService.transferMoneyBetweenAccounts(amount, senderAccountNumber, receiverAccountNumber);
 
             if (executionResult) {
-                response.sendRedirect(URLPattern.REDIRECT_TO_GOOD_PAGE);
+                response.sendRedirect(URLPattern.URL_TO_GOOD_PAGE);
             } else {
                 response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
             }

@@ -13,19 +13,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class AddMoneyToAccountCommand implements Command {
+public class WithdrawMoneyFromAccountCommand implements Command {
 
     private final static AccountService accountService = ServiceFactory.getInstance().getAccountService();
 
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         BigDecimal amount = new BigDecimal(request.getParameter(RequestParam.MONEY_AMOUNT));
         String accountNumber = request.getParameter(RequestParam.ACCOUNT_NUMBER);
 
         try {
-            boolean executionResult = accountService.putMoneyToAccount(amount, accountNumber);
+            boolean executionResult = accountService.withdrawMoneyFromAccount(amount, accountNumber);
 
             if (executionResult) {
                 response.sendRedirect(URLPattern.URL_TO_GOOD_PAGE);
