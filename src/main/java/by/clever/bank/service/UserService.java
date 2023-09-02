@@ -1,7 +1,6 @@
 package by.clever.bank.service;
 
 import by.clever.bank.bean.User;
-import by.clever.bank.dao.exception.DAOException;
 import by.clever.bank.service.exception.ServiceException;
 
 public interface UserService {

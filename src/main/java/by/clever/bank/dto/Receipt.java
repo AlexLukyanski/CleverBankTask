@@ -1,7 +1,5 @@
 package by.clever.bank.dto;
 
-import by.clever.bank.bean.constant.TransactionType;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
