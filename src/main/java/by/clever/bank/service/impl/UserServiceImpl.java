@@ -6,6 +6,7 @@ import by.clever.bank.dao.UserDAO;
 import by.clever.bank.dao.exception.DAOException;
 import by.clever.bank.service.UserService;
 import by.clever.bank.service.exception.ServiceException;
+import by.clever.bank.service.exception.ServiceValidationException;
 
 public class UserServiceImpl implements UserService {
 
@@ -14,8 +15,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean createUser(User user) throws ServiceException {
         try {
-            return userDao.createUser(user);
-        } catch (DAOException e) {
+            if (user != null) {
+                return userDao.createUser(user);
+            } else {
+                throw new ServiceValidationException("Null arguments are not accepted");
+            }
+        } catch (DAOException | ServiceValidationException e) {
             throw new ServiceException(e);
         }
     }
@@ -23,8 +28,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateUser(User oldUser, User newUser) throws ServiceException {
         try {
-            return userDao.updateUser(oldUser, newUser);
-        } catch (DAOException e) {
+            if (oldUser != null && newUser != null) {
+                return userDao.updateUser(oldUser, newUser);
+            } else {
+                throw new ServiceValidationException("Null arguments are not accepted");
+            }
+        } catch (DAOException | ServiceValidationException e) {
             throw new ServiceException(e);
         }
     }
@@ -32,8 +41,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User readUser(int userID) throws ServiceException {
         try {
-            return userDao.readUser(userID);
-        } catch (DAOException e) {
+            if (userID > 0) {
+                return userDao.readUser(userID);
+            } else {
+                throw new ServiceValidationException("Negative or zero arguments are not accepted");
+            }
+        } catch (DAOException | ServiceValidationException e) {
             throw new ServiceException(e);
         }
     }
@@ -41,8 +54,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteUser(int userID) throws ServiceException {
         try {
-            return userDao.deleteUser(userID);
-        } catch (DAOException e) {
+            if (userID > 0) {
+                return userDao.deleteUser(userID);
+            } else {
+                throw new ServiceValidationException("Negative or zero arguments are not accepted");
+            }
+        } catch (DAOException | ServiceValidationException e) {
             throw new ServiceException(e);
         }
     }

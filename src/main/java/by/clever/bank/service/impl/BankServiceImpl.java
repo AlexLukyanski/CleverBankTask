@@ -6,6 +6,7 @@ import by.clever.bank.dao.DAOFactory;
 import by.clever.bank.dao.exception.DAOException;
 import by.clever.bank.service.BankService;
 import by.clever.bank.service.exception.ServiceException;
+import by.clever.bank.service.exception.ServiceValidationException;
 
 public class BankServiceImpl implements BankService {
 
@@ -15,8 +16,12 @@ public class BankServiceImpl implements BankService {
     public boolean createBank(Bank bank) throws ServiceException {
 
         try {
-            return bankDAO.createBank(bank);
-        } catch (DAOException e) {
+            if (bank != null) {
+                return bankDAO.createBank(bank);
+            } else {
+                throw new ServiceValidationException("Null arguments are not accepted");
+            }
+        } catch (DAOException | ServiceValidationException e) {
             throw new ServiceException(e);
         }
     }
@@ -24,8 +29,12 @@ public class BankServiceImpl implements BankService {
     @Override
     public boolean updateBank(Bank oldBank, Bank newBank) throws ServiceException {
         try {
-            return bankDAO.updateBank(oldBank, newBank);
-        } catch (DAOException e) {
+            if (oldBank != null && newBank != null) {
+                return bankDAO.updateBank(oldBank, newBank);
+            } else {
+                throw new ServiceValidationException("Null arguments are not accepted");
+            }
+        } catch (DAOException | ServiceValidationException e) {
             throw new ServiceException(e);
         }
     }
@@ -33,8 +42,12 @@ public class BankServiceImpl implements BankService {
     @Override
     public Bank readBank(String bankName) throws ServiceException {
         try {
-            return bankDAO.readBank(bankName);
-        } catch (DAOException e) {
+            if (bankName != null) {
+                return bankDAO.readBank(bankName);
+            } else {
+                throw new ServiceValidationException("Null arguments are not accepted");
+            }
+        } catch (DAOException | ServiceValidationException e) {
             throw new ServiceException(e);
         }
     }
@@ -42,8 +55,12 @@ public class BankServiceImpl implements BankService {
     @Override
     public boolean deleteBank(String bankName) throws ServiceException {
         try {
-            return bankDAO.deleteBank(bankName);
-        } catch (DAOException e) {
+            if (bankName != null) {
+                return bankDAO.deleteBank(bankName);
+            } else {
+                throw new ServiceValidationException("Null arguments are not accepted");
+            }
+        } catch (DAOException | ServiceValidationException e) {
             throw new ServiceException(e);
         }
     }
