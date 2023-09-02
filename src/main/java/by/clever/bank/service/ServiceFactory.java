@@ -1,9 +1,6 @@
 package by.clever.bank.service;
 
-import by.clever.bank.service.impl.AccountServiceImpl;
-import by.clever.bank.service.impl.AccrualServiceImpl;
-import by.clever.bank.service.impl.BankServiceImpl;
-import by.clever.bank.service.impl.UserServiceImpl;
+import by.clever.bank.service.impl.*;
 import lombok.Getter;
 
 @Getter
@@ -13,6 +10,7 @@ public final class ServiceFactory {
     private final AccrualService accrualService = new AccrualServiceImpl();
     private final BankService bankService = new BankServiceImpl();
     private final UserService userService = new UserServiceImpl();
+    private final TransactionService transactionService = new TransactionServiceImpl();
 
     private ServiceFactory() {
 

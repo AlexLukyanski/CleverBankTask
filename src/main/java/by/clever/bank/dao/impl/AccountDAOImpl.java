@@ -1,7 +1,12 @@
 package by.clever.bank.dao.impl;
 
 import by.clever.bank.bean.Account;
+import by.clever.bank.bean.Bank;
 import by.clever.bank.dao.AccountDAO;
+import by.clever.bank.dao.BankDAO;
+import by.clever.bank.dao.DAOFactory;
+import by.clever.bank.dao.connectionpool.ConnectionPool;
+import by.clever.bank.dao.connectionpool.ConnectionPoolException;
 import by.clever.bank.dao.exception.DAOException;
 import by.clever.bank.dao.impl.constant.DBColumnAccountName;
 import by.clever.bank.dao.impl.constant.DBColumnBankName;
@@ -94,5 +99,114 @@ public class AccountDAOImpl implements AccountDAO {
         } catch (SQLException e) {
             throw new DAOException(e);
         }
+    }
+
+    private final static String INSERT_NEW_ACCOUNT_SQL = "INSERT INTO account " +
+            "(a_number,a_balance,a_bank,a_user) VALUES (?,?,?,?)";
+
+    @Override
+    public boolean createAccount(Account account, String bankName, int userID) throws DAOException {
+        try (Connection connection = ConnectionPool.getInstance().takeConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_NEW_ACCOUNT_SQL)) {
+
+            BankDAO bankDAO = DAOFactory.getInstance().getBankDAO();
+            Bank bank = bankDAO.readBank(bankName);
+
+            preparedStatement.setString(1, account.getNumber());
+            preparedStatement.setBigDecimal(2, account.getBalance());
+            preparedStatement.setInt(3, bank.getId());
+            preparedStatement.setInt(4, userID);
+
+            int insertionResult = preparedStatement.executeUpdate();
+
+            if (insertionResult != 0) {
+                return true;
+            }
+            return false;
+
+        } catch (SQLException | ConnectionPoolException e) {
+            System.out.println("sbesrhserhsrth");
+            throw new DAOException(e);
+        }
+    }
+
+    private final static String UPDATE_ACCOUNT_SQL = "UPDATE account SET" +
+            " a_number=?,a_balance=?" +
+            "WHERE a_id=(SELECT a_id FROM account WHERE a_number=?)";
+
+    @Override
+    public boolean updateAccount(Account oldAccount, Account newAccount) throws DAOException {
+        try (Connection connection = ConnectionPool.getInstance().takeConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ACCOUNT_SQL)) {
+
+            preparedStatement.setString(1, newAccount.getNumber());
+            preparedStatement.setBigDecimal(2, newAccount.getBalance());
+            preparedStatement.setString(3, oldAccount.getNumber());
+
+            int insertionResult = preparedStatement.executeUpdate();
+
+            if (insertionResult != 0) {
+                return true;
+            }
+            return false;
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    private final static String SELECT_ACCOUNT_SQL = "SELECT" +
+            "a_id,a_number,a_balance,b_id,b_name " +
+            "FROM users JOIN bank ON a_bank=b_id WHERE a_id=?";
+
+    @Override
+    public Account readAccount(int accountID) throws DAOException {
+        try (Connection connection = ConnectionPool.getInstance().takeConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ACCOUNT_SQL)) {
+
+            preparedStatement.setInt(1, accountID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            Bank bank = setBank(resultSet);
+            return setAccount(resultSet, bank);
+
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    private final static String DELETE_ACCOUNT_SQL = "DELETE FROM account WHERE ui_id=?";
+
+    @Override
+    public boolean deleteAccount(int accountID) throws DAOException {
+        try (Connection connection = ConnectionPool.getInstance().takeConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ACCOUNT_SQL)) {
+
+            preparedStatement.setInt(1, accountID);
+
+            int deleteResult = preparedStatement.executeUpdate();
+
+            if (deleteResult != 0) {
+                return true;
+            }
+            return false;
+        } catch (SQLException | ConnectionPoolException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    private Bank setBank(ResultSet resultSet) throws SQLException {
+        Bank bank = new Bank();
+        bank.setId(resultSet.getInt(DBColumnBankName.ID_COLUMN));
+        bank.setName(resultSet.getString(DBColumnBankName.NAME_COLUMN));
+        return bank;
+    }
+
+    private Account setAccount(ResultSet resultSet, Bank bank) throws SQLException {
+        Account account = new Account();
+        account.setId(resultSet.getInt(DBColumnAccountName.ID_COLUMN));
+        account.setNumber(resultSet.getString(DBColumnAccountName.NUMBER_COLUMN));
+        account.setBalance(resultSet.getBigDecimal(DBColumnAccountName.BALANCE_COLUMN));
+        account.setBank(bank);
+        return account;
     }
 }

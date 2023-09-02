@@ -18,5 +18,14 @@ public interface AccountDAO {
     List<Account> selectIdAndNumberAndBalanceFromAllAccounts(Connection connection) throws DAOException;
 
     String takeBankName(Connection connection, int accountID) throws DAOException;
+
+    //Below are CRUD operations
+    boolean createAccount(Account account, String bankName, int userID) throws DAOException;
+
+    boolean updateAccount(Account oldAccount, Account newAccount) throws DAOException;
+
+    Account readAccount(int accountID) throws DAOException;
+
+    boolean deleteAccount(int accountID) throws DAOException;
 }
 

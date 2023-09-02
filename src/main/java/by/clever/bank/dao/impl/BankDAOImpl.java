@@ -12,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class BankDaoImpl implements BankDAO {
+public class BankDAOImpl implements BankDAO {
 
     private final static String INSERT_NEW_BANK_SQL = "INSERT INTO bank (b_name) VALUES (?)";
 
@@ -27,9 +27,9 @@ public class BankDaoImpl implements BankDAO {
 
             if (insertionResult != 0) {
                 return true;
-            } else {
-                return false;
             }
+            return false;
+
         } catch (SQLException | ConnectionPoolException e) {
             throw new DAOException(e);
         }
@@ -64,9 +64,10 @@ public class BankDaoImpl implements BankDAO {
 
             preparedStatement.setString(1, bankName);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            return createBank(resultSet);
-
+            if (resultSet.next()) {
+                return createBank(resultSet);
+            }
+            throw new DAOException("There is no bank with that name");
         } catch (SQLException | ConnectionPoolException e) {
             throw new DAOException(e);
         }
@@ -80,7 +81,7 @@ public class BankDaoImpl implements BankDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BANK_SQL)) {
 
             preparedStatement.setString(1, bankName);
-            
+
             int deleteResult = preparedStatement.executeUpdate();
 
             if (deleteResult != 0) {

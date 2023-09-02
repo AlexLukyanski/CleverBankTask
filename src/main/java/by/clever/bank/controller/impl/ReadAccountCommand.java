@@ -1,36 +1,31 @@
 package by.clever.bank.controller.impl;
 
-import by.clever.bank.bean.Bank;
+import by.clever.bank.bean.Account;
 import by.clever.bank.controller.Command;
 import by.clever.bank.controller.constant.RequestParam;
 import by.clever.bank.controller.constant.URLPattern;
-import by.clever.bank.service.BankService;
+import by.clever.bank.service.AccountService;
 import by.clever.bank.service.ServiceFactory;
 import by.clever.bank.service.exception.ServiceException;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class ReadBankCommand implements Command {
+public class ReadAccountCommand implements Command {
 
-    private final static BankService bankService = ServiceFactory.getInstance().getBankService();
-    private final static Logger log = LogManager.getRootLogger();
-
+    private final static AccountService accountService = ServiceFactory.getInstance().getAccountService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            Bank bank = bankService.readBank(request.getParameter(RequestParam.KEY_TO_BANK_NAME));
+            Account account = accountService.readAccount(Integer.parseInt(request.getParameter(RequestParam.ACCOUNT_ID)));
 
-            if (bank != null) {
+            if (account != null) {
 
-                request.setAttribute(RequestParam.KEY_TO_BANK_BEAN, bank);
+                request.setAttribute(RequestParam.KEY_TO_ACCOUNT_BEAN, account);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(URLPattern.URL_TO_GOOD_PAGE);
 
                 if (requestDispatcher != null) {
@@ -40,11 +35,9 @@ public class ReadBankCommand implements Command {
                 }
 
             } else {
-
                 response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
             }
         } catch (ServiceException e) {
-            log.log(Level.ERROR, "Something's wrong", e);
             response.sendRedirect(URLPattern.REDIRECT_TO_ERROR_PAGE);
         }
     }

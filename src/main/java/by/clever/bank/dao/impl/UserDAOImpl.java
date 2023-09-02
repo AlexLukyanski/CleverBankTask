@@ -29,9 +29,9 @@ public class UserDAOImpl implements UserDAO {
 
             if (insertionResult != 0) {
                 return true;
-            } else {
-                return false;
             }
+            return false;
+
         } catch (SQLException | ConnectionPoolException e) {
             throw new DAOException(e);
         }
@@ -65,7 +65,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     private final static String SELECT_USER_SQL = "SELECT" +
-            " ui_name,ui_surname,ui_patronymic,ui_dateofbirth,ui_phonenumber,ui_email " +
+            "ui_id,ui_name,ui_surname,ui_patronymic,ui_dateofbirth,ui_phonenumber,ui_email " +
             "FROM users WHERE ui_id=?";
 
     @Override

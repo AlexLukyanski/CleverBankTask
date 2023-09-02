@@ -21,6 +21,15 @@ public final class CommandFactory {
         commands.put(CommandName.ADD_NEW_USER, new CreateUserCommand());
         commands.put(CommandName.UPDATE_USER, new UpdateUserCommand());
         commands.put(CommandName.READ_USER, new ReadUserCommand());
+        commands.put(CommandName.DELETE_USER, new DeleteUserCommand());
+        commands.put(CommandName.ADD_NEW_ACCOUNT, new CreateAccountCommand());
+        commands.put(CommandName.UPDATE_ACCOUNT, new UpdateAccountCommand());
+        commands.put(CommandName.READ_ACCOUNT, new ReadAccountCommand());
+        commands.put(CommandName.DELETE_ACCOUNT, new DeleteAccountCommand());
+        commands.put(CommandName.ADD_NEW_TRANSACTION, new CreateTransactionCommand());
+        commands.put(CommandName.UPDATE_TRANSACTION, new UpdateTransactionCommand());
+        commands.put(CommandName.READ_TRANSACTION, new ReadTransactionCommand());
+        commands.put(CommandName.DELETE_TRANSACTION, new DeleteTransactionCommand());
     }
 
     public Command getCommand(String name) {
