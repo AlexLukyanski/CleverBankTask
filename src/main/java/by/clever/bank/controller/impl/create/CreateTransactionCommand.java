@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Proceed specified command as it goes by its name
+ */
 public class CreateTransactionCommand implements Command {
 
     private final static TransactionService transactionService = ServiceFactory.getInstance().getTransactionService();

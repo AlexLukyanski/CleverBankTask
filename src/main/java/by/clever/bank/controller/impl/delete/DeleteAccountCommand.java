@@ -15,6 +15,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+/**
+ * Proceed specified command as it goes by its name
+ */
 public class DeleteAccountCommand implements Command {
 
     private final static AccountService accountService = ServiceFactory.getInstance().getAccountService();

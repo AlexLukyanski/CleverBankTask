@@ -16,6 +16,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+/**
+ * Proceed specified command as it goes by its name
+ */
 public class AddMoneyToAccountCommand implements Command {
 
     private final static AccountService accountService = ServiceFactory.getInstance().getAccountService();

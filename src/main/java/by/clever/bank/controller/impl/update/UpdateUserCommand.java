@@ -17,6 +17,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.time.LocalDate;
 
+/**
+ * Proceed specified command as it goes by its name
+ */
 public class UpdateUserCommand implements Command {
 
     private final static UserService userService = ServiceFactory.getInstance().getUserService();

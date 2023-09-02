@@ -17,6 +17,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+/**
+ * Proceed specified command as it goes by its name
+ */
 public class ReadTransactionCommand implements Command {
 
     private final static TransactionService transactionService = ServiceFactory.getInstance().getTransactionService();

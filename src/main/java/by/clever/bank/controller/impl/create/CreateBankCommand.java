@@ -16,6 +16,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+/**
+ * Proceed specified command as it goes by its name
+ */
 public class CreateBankCommand implements Command {
 
     private final static BankService bankService = ServiceFactory.getInstance().getBankService();
