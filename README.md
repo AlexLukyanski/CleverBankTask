@@ -41,17 +41,15 @@ Java 17, JDBC, Servlet (JakartaEE 10), Gradle 7.5, PostgreSQL 14, Tomcat 10, Git
 # Инструкция по запуску проекта:
 1. Используя Docker по следующим шагам:
 
-1.1 Из директории \src\postgres выполнить следующую комманду:
-
+1.1 Из директории \src\postgres выполнить следующую комманду:  
    docker image build -t clever-task-db
 
-1.2 Из директории \src\tomcat выполнить следующую комманду:
-
+1.2 Из директории \src\tomcat выполнить следующую комманду:  
    docker image build -t tomcat-clever-bank
 
 1.3 Для запуска контейнеров выполнить следующие комманды:
 
-   docker run -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD=qwerty clever-db
+   docker run -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD=qwerty clever-db  
    docker run -it --rm -p 8080:8080 tomcat-clever-bank
 
 2. Без Docker-a по следующим шагам:
@@ -77,35 +75,33 @@ Java 17, JDBC, Servlet (JakartaEE 10), Gradle 7.5, PostgreSQL 14, Tomcat 10, Git
 
 localhost:8080/CleverBankTask/FrontController
 
-   в body данного запроса включить следующие параметры:
-   NewBankName:ExampleBank2 (или другое имя банка)
-   check:ADD_NEW_BANK
+   в body данного запроса включить следующие параметры:  
+   NewBankName:ExampleBank2 (или другое имя банка)  
+   check:ADD_NEW_BANK  
 
-2. READ (GET request (метод doGet httpservlet)):
+2. READ (GET request (метод doGet httpservlet)):  
 
    localhost:8080/CleverBankTask/FrontController?check=READ_BANK&BankName=ExampleBank2
 
-3. UPDATE (PUT request (метод doPut httpservlet), метода doPatch у стандартного httpservlet нет (и это не REST проект)):
+3. UPDATE (PUT request (метод doPut httpservlet), метода doPatch у стандартного httpservlet нет (и это не REST проект)):  
 
-localhost:8080/CleverBankTask/FrontController?check=UPDATE_BANK
+   localhost:8080/CleverBankTask/FrontController?check=UPDATE_BANK  
 
-   в body данного запроса включить следующие параметры:
-   check:UPDATE_BANK
-   OldBankName:ExampleBank2
-   NewBankName:ExampleBank2NEW
+   в body данного запроса включить следующие параметры:  
+   check:UPDATE_BANK  
+   OldBankName:ExampleBank2  
+   NewBankName:ExampleBank2NEW  
 
-4. DELETE (DELETE request (метод doDelete httpservlet)):
+5. DELETE (DELETE request (метод doDelete httpservlet)):  
 
-   localhost:8080/CleverBankTask/FrontController
+   localhost:8080/CleverBankTask/FrontController  
+ 
+   в body данного запроса включить следующие параметры:  
+   check:DELETE_BANK  
+   BankName:ExampleBank2NEW  
 
-   в body данного запроса включить следующие параметры:
-   check:DELETE_BANK
-   BankName:ExampleBank2NEW
-
-**Обращаю внимание, что при запуске проекта в Docker использовать следующий паттерн запросов:**
-
-**localhost:8080/APP/FrontController**
-
-**Остальные элементы как и в описании выше.**
+**Обращаю внимание, что при запуске проекта в Docker использовать следующий паттерн запросов:**  
+**localhost:8080/APP/FrontController**  
+**Остальные элементы как и в описании выше.**  
 
 Спасибо за прочтение и приятной проверки)
