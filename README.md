@@ -65,8 +65,10 @@ localhost:8080/CleverBankTask/FrontController
 check:DELETE_BANK
 BankName:ExampleBank2NEW
 
-# Обращаю внимание, что при запуске проекта в Docker использовать следующий паттерн запросов:
-# localhost:8080/APP/FrontController
-# Остальные элементы как и в описании выше.
+**Обращаю внимание, что при запуске проекта в Docker использовать следующий паттерн запросов:**
+
+**localhost:8080/APP/FrontController**
+
+**Остальные элементы как и в описании выше**
 
 Спасибо за прочтение и приятной проверки)
