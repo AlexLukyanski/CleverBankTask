@@ -51,7 +51,7 @@ docker image build -t tomcat-clever-bank
 docker run -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD=qwerty clever-db
 docker run -it --rm -p 8080:8080 tomcat-clever-bank
 
-3. Без Docker-a по следующим шагам:
+2. Без Docker-a по следующим шагам:
 
 2.1 Импортировать в IDE (c IntelliJ IDEA работает точно) как Gradle-проект.
 
@@ -71,23 +71,30 @@ docker run -it --rm -p 8080:8080 tomcat-clever-bank
 
 В текстовом виде есть возможность привести лишь основные паттерны запросов:
 1. CREATE (POST request (метод doPost httpservlet)):
-localhost:8080/CleverBankTask/FrontController 
+
+localhost:8080/CleverBankTask/FrontController
+
 в body данного запроса включить следующие параметры:
 NewBankName:ExampleBank2 (или другое имя банка)
 check:ADD_NEW_BANK
 
-3. READ (GET request (метод doGet httpservlet)):
+2. READ (GET request (метод doGet httpservlet)):
+
 localhost:8080/CleverBankTask/FrontController?check=READ_BANK&BankName=ExampleBank2
 
-4. UPDATE (PUT request (метод doPut httpservlet), метода doPatch у стандартного httpservlet нет (и это не REST проект)):
+3. UPDATE (PUT request (метод doPut httpservlet), метода doPatch у стандартного httpservlet нет (и это не REST проект)):
+
 localhost:8080/CleverBankTask/FrontController?check=UPDATE_BANK
+
 в body данного запроса включить следующие параметры:
 check:UPDATE_BANK
 OldBankName:ExampleBank2
 NewBankName:ExampleBank2NEW
 
-5. DELETE (DELETE request (метод doDelete httpservlet)):
+4. DELETE (DELETE request (метод doDelete httpservlet)):
+
 localhost:8080/CleverBankTask/FrontController
+
 в body данного запроса включить следующие параметры:
 check:DELETE_BANK
 BankName:ExampleBank2NEW
