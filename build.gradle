@@ -7,7 +7,7 @@ plugins {
 war {
     webAppDirectory = file('src/main/webapp')
     webInf { from 'src/additionalWebInf' }
-    webXml = file('src/someWeb.xml')
+    webXml = file('src/main/webapp/WEB-INF/web.xml')
 }
 
 group 'by.clever'
@@ -30,6 +30,10 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-api:2.12.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
     implementation 'org.yaml:snakeyaml:2.1'
+}
+
+tasks.withType(War) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 test {
