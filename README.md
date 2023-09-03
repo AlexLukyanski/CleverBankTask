@@ -59,18 +59,18 @@ Java 17, JDBC, Servlet (JakartaEE 10), Gradle 7.5, PostgreSQL 14, Tomcat 10, Git
 Хотелось бы отметить, что ввиду запрета на Spring и Hibernate, проект создавался как классическое веб-приложение на сервлетах и jsp. 
 Также REST и, соответственно, JSON никоим образом не подразумевались мной (и не требовались по заданию) как элементы проекта.
 По причине данных обстоятельств относительно наглядно продемонстрировать входные и выходные данные возможность есть только скриншотами из Postman-a
-(располагаются в \src\CRUDexamples) Без веб-интерфейса направить Put и Delete запросы в body через Postman не получилось.
+(располагаются в \src\CRUDexamples). Без веб-интерфейса направить Put и Delete запросы в body через Postman не получилось.
 
 В текстовом виде есть возможность привести лишь основные паттерны запросов:  
 1. CREATE (POST request (метод doPost httpservlet)):  
-localhost:8080/CleverBankTask/FrontController  
+   localhost:8080/CleverBankTask/FrontController  
 
-в body данного запроса включить следующие параметры:  
-NewBankName:ExampleBank2 (или другое имя банка)  
-check:ADD_NEW_BANK  
+   в body данного запроса включить следующие параметры:  
+   NewBankName:ExampleBank2 (или другое имя банка)  
+   check:ADD_NEW_BANK  
 
 2. READ (GET request (метод doGet httpservlet)):    
-localhost:8080/CleverBankTask/FrontController?check=READ_BANK&BankName=ExampleBank2  
+   localhost:8080/CleverBankTask/FrontController?check=READ_BANK&BankName=ExampleBank2  
 
 3. UPDATE (PUT request (метод doPut httpservlet), метода doPatch у стандартного httpservlet нет (и это не REST проект)):  
    localhost:8080/CleverBankTask/FrontController?check=UPDATE_BANK    
