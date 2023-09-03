@@ -40,17 +40,25 @@ Java 17, JDBC, Servlet (JakartaEE 10), Gradle 7.5, PostgreSQL 14, Tomcat 10, Git
 
 # Инструкция по запуску проекта:
 1. Используя Docker по следующим шагам:
+
 1.1 Из директории \src\postgres выполнить следующую комманду:
 docker image build -t clever-task-db
+
 1.2 Из директории \src\tomcat выполнить следующую комманду:
 docker image build -t tomcat-clever-bank
+
 1.3 Для запуска контейнеров выполнить следующие комманды:
 docker run -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD=qwerty clever-db
 docker run -it --rm -p 8080:8080 tomcat-clever-bank
-2. Без Docker-a по следующим шагам:
+
+3. Без Docker-a по следующим шагам:
+
 2.1 Импортировать в IDE (c IntelliJ IDEA работает точно) как Gradle-проект.
+
 2.2 Поменять логин и пароль к БД на необходимые в файле \src\main\resources\db.properties.
+
 2.3 Создать таблицы в БД (необходимые SQL-запросы в папке \src\postgres\sql).
+
 2.4 Запустить в IDE через Tomcat 10.
    
 # Эндпоинты:
@@ -68,17 +76,17 @@ localhost:8080/CleverBankTask/FrontController
 NewBankName:ExampleBank2 (или другое имя банка)
 check:ADD_NEW_BANK
 
-2. READ (GET request (метод doGet httpservlet)):
+3. READ (GET request (метод doGet httpservlet)):
 localhost:8080/CleverBankTask/FrontController?check=READ_BANK&BankName=ExampleBank2
 
-3. UPDATE (PUT request (метод doPut httpservlet), метода doPatch у стандартного httpservlet нет (и это не REST проект)):
+4. UPDATE (PUT request (метод doPut httpservlet), метода doPatch у стандартного httpservlet нет (и это не REST проект)):
 localhost:8080/CleverBankTask/FrontController?check=UPDATE_BANK
 в body данного запроса включить следующие параметры:
 check:UPDATE_BANK
 OldBankName:ExampleBank2
 NewBankName:ExampleBank2NEW
 
-4. DELETE (DELETE request (метод doDelete httpservlet)):
+5. DELETE (DELETE request (метод doDelete httpservlet)):
 localhost:8080/CleverBankTask/FrontController
 в body данного запроса включить следующие параметры:
 check:DELETE_BANK
