@@ -1,0 +1,7 @@
+Receipt
+Number:      10
+2023-09-01      19:26:05.045794200
+Transaction type:      WITHDRAWAL
+Bank name:      CleverBank
+Account number:      06S8J33J5OHD8605
+Amount:      1

@@ -1,0 +1,8 @@
+Receipt
+Number:      12
+2023-09-01      19:27:52.594786700
+Transaction type:      TRANSFER_BETWEEN_ACCOUNTS
+Receiver bank:      ForeverBank
+Sender bank:      CleverBank
+Receiver account:      4DYVEV2B5VOWPBAXSender account:      06S8J33J5OHD8605
+Amount:      2.2
